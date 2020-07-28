@@ -1,0 +1,99 @@
+$blue: #687bf7;
+$lightblue: #72d9ef;
+$cyan: #79e7eb;
+
+html {
+
+  box-sizing: border-box;
+
+  *:not(img), *:before, *:after { box-sizing: inherit; }
+
+  color: #333;
+  //    font-size / line-heigth font-family
+  font: 1em / 1 "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+  background: #1d1e21;
+
+}
+
+body {
+  margin: 0;
+}
+
+
+
+.App {
+
+  background: white;
+  background: white;
+  border-radius: 15px;
+  padding: 0.5em;
+
+  & {
+    --my-width: 70%;
+  }
+
+
+
+  width: var(--my-width);
+  margin: auto;
+
+  &:hover {
+    box-shadow: 4px 4px 50px rgba(#687bf7, 0.6);
+  }
+
+  .itemLi {
+
+    list-style-type: none;
+    width: 100%;
+    margin-bottom: 10px;
+
+    display: flex;
+    text-align: center;
+    align-items: center;
+
+    border: 1px black solid;
+
+
+    > div {
+      flex: 1;
+
+    }
+
+    div:nth-of-type(2) {
+
+      text-align: initial;
+      flex: 9;
+
+      span {
+        line-height: 5;
+        margin-left: 10px;
+
+        &.barred {
+          text-decoration: line-through;
+        }
+      }
+
+    }
+
+    div:last-of-type {
+
+      button {
+        all: unset;
+        i {
+          color: red;
+        }
+      }
+
+    }
+
+
+  }
+
+  .itemLi:last-child {
+
+    margin-bottom: 0;
+
+  }
+
+}
