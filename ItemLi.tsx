@@ -56,11 +56,26 @@ export const ItemLi: React.FunctionComponent<Props>=
     )
   );
 
-  const [isEddit, setIsEddit] = useState(false);
 
-  const [evtText] = useState(()=>Evt.create(name));
+  const [ evtIsEditing ] = useState(()=> Evt.create(false));
+  const [evtName] = useState(()=>Evt.create(name));
 
-  useStatefulEvt([ evtText ]);
+  useStatefulEvt([ evtName, evtIsEditing ]);
+
+  
+  useEffect(()=>{
+
+    if( isRequestUpdateNamePending ){
+      return;
+    }
+
+    evtIsEditing.state = false;
+
+
+  }, [isRequestUpdateNamePending]);
+  
+
+
 
   /*
   NOTE: It would be much easyer to have a simple 
@@ -69,11 +84,13 @@ export const ItemLi: React.FunctionComponent<Props>=
   hook but it use it anyway as the goal of this demo
   is mainly to demonstrate how to use EVT with react.
   */
+
   useSearch({ 
     "delay": 750, 
-    "evtQuery": evtText, 
+    "evtQuery": evtName, 
     "search": updateItemNameProxy 
   });
+
   
   return (
     <li className="itemLi">
@@ -89,8 +106,43 @@ export const ItemLi: React.FunctionComponent<Props>=
           />
       }
       </div>
- 
-      <span className={isCompleted?"barred":""}>{name}</span>
+
+      
+      <div>
+        <input
+            type="text"
+            value={evtName.state}
+            onChange={useCallback(({target})=>evtName.state = target.value,[])}
+           />
+      </div>
+
+      
+      
+      
+
+      
+      {/*
+      <div>
+      {
+        evtIsEditing.state ?(
+        <div>
+          {isRequestUpdateNamePending && <Spinner />}
+          <input
+            type="text"
+            value={evtName.state}
+            onChange={useCallback(({target})=>evtName.state = target.value,[])}
+           />
+        </div>):
+        <span 
+          className={isCompleted?"barred":""} 
+          onClick={useCallback(()=> evtIsEditing.state = true,[])}
+        >{name}</span>
+      }
+      </div>
+      */}
+      
+      
+
   
       <div>
       {

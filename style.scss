@@ -44,20 +44,27 @@ body {
     align-items: center;
     border-radius: 7px;
 
-    div:first-of-type {
+    > div:first-of-type {
       text-align: center;
       display: inline-block;
       width: 3em;
     }
 
 
-    span {
-      &.barred {
-        text-decoration: line-through;
+    > div:nth-of-type(2){
+
+      input {
+        width: 300px;
+      }
+
+      span {
+        &.barred {
+          text-decoration: line-through;
+        }
       }
     }
 
-    div:last-of-type {
+    > div:last-of-type {
       margin-left: auto;
       margin-right: 1em;
 
