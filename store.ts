@@ -39,7 +39,7 @@ export async function getMockApi(): Promise<Api> {
   const items: MutableItem[]= [
     { "id": getNewId(), "name": "🚀 Understand the useEvt hook", "isCompleted": false },
     { "id": getNewId(), "name": "⭐ Understand the useStatefulEvt hook", "isCompleted": false },
-    { "id": getNewId(), "name": "🔒 Checkout run-exclusive, use it with requests", "isCompleted": false },
+    { "id": getNewId(), "name": "🔒 Checkout run-exclusive, usefull for network requests", "isCompleted": false },
     { "id": getNewId(), "name": "💧 Acknowledge that EVT works well with React Hooks", "isCompleted": true },
 
   ];

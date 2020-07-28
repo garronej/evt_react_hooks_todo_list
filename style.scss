@@ -10,7 +10,11 @@ html {
 
   color: #333;
   //    font-size / line-heigth font-family
-  font: 1em / 1 "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font: 0.7em / 1 "Helvetica Neue", Helvetica, Arial, sans-serif;
+  
+  @media (min-width: 500px) {
+    font-size: 1em;
+  }
 
   background: #1d1e21;
 
@@ -21,90 +25,12 @@ body {
 }
 
 
-/*
 .App {
 
   background: white;
   border-radius: 15px;
   padding: 0.5em;
-
-  & {
-    --my-width: 70%;
-  }
-
-
-
-  width: var(--my-width);
-  margin: auto;
-
-  &:hover {
-    box-shadow: 4px 4px 50px rgba(#687bf7, 0.6);
-  }
-
-  .itemLi {
-
-    list-style-type: none;
-    width: 100%;
-    margin-bottom: 10px;
-
-    display: flex;
-    text-align: center;
-    align-items: center;
-
-    border: 1px black solid;
-
-
-    > div {
-      flex: 1;
-
-    }
-
-    div:nth-of-type(2) {
-
-      text-align: initial;
-      flex: 9;
-
-      span {
-        line-height: 5;
-        margin-left: 10px;
-
-        &.barred {
-          text-decoration: line-through;
-        }
-      }
-
-    }
-
-    div:last-of-type {
-
-      button {
-        all: unset;
-        cursor: pointer;
-        i {
-          color: red;
-        }
-      }
-
-    }
-
-
-  }
-
-  .itemLi:last-child {
-
-    margin-bottom: 0;
-
-  }
-
-}
-*/
-
-.App {
-
-  background: white;
-  border-radius: 15px;
-  padding: 0.5em;
-  width: 70%;
+  max-width: 700px;
   margin: auto;
 
   &:hover {
@@ -127,8 +53,9 @@ body {
       width: 3em;
     }
 
+    height: 70px;
+
     span {
-      line-height: 5;
       &.barred {
         text-decoration: line-through;
       }
