@@ -21,10 +21,9 @@ body {
 }
 
 
-
+/*
 .App {
 
-  background: white;
   background: white;
   border-radius: 15px;
   padding: 0.5em;
@@ -80,6 +79,7 @@ body {
 
       button {
         all: unset;
+        cursor: pointer;
         i {
           color: red;
         }
@@ -88,6 +88,67 @@ body {
     }
 
 
+  }
+
+  .itemLi:last-child {
+
+    margin-bottom: 0;
+
+  }
+
+}
+*/
+
+.App {
+
+  background: white;
+  border-radius: 15px;
+  padding: 0.5em;
+  width: 70%;
+  margin: auto;
+
+  &:hover {
+    box-shadow: 4px 4px 50px rgba(#687bf7, 0.6);
+  }
+
+  .itemLi {
+
+    list-style-type: none;
+    margin-bottom: 10px;
+
+    display: flex;
+    
+    align-items: center;
+    border: 1px black solid;
+
+    div:first-of-type {
+      text-align: center;
+      display: inline-block;
+      width: 3em;
+    }
+
+    span {
+      line-height: 5;
+      &.barred {
+        text-decoration: line-through;
+      }
+    }
+
+    div:last-of-type {
+      margin-left: auto;
+      margin-right: 1em;
+
+
+      button {
+        all: unset;
+        cursor: pointer;
+        i {
+          color: red;
+        }
+      }
+
+    }
+    
   }
 
   .itemLi:last-child {

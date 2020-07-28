@@ -75,6 +75,7 @@ export const ItemLi: React.FunctionComponent<Props>=
     "search": updateItemNameProxy 
   });
 
+  /*
   return (
     <li className="itemLi">
       <div>
@@ -102,15 +103,43 @@ export const ItemLi: React.FunctionComponent<Props>=
           </button>
       }
       </div>
-    
+    </li>
+  );
+  */
 
-    
-
-
-
-
-
+  
+  return (
+    <li className="itemLi">
+      <div>
+      {
+        isRequestUpdateIsCompletePending ? 
+          <Spinner /> :
+          <input
+            type="checkbox"
+            checked={isCompleted}
+            onChange={updateItemIsCompletedProxy}
+            readOnly={isRequestUpdateIsCompletePending}
+          />
+      }
+      </div>
+ 
+      <span className={isCompleted?"barred":""}>{name}</span>
+  
+      <div>
+      {
+        isRequestDeleteItemPending ? 
+          <Spinner /> :
+          <button onClick={deleteItemProxy}>
+            <i className="fa fa-trash-o" />
+          </button>
+      }
+      </div>
     </li>
   );
 
+  
+
 };
+
+const Spinner: React.FunctionComponent = ()=> 
+  <i className="fa fa-spin fa-spinner" />;
