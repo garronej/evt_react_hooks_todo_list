@@ -9,7 +9,6 @@ html {
   *:not(img), *:before, *:after { box-sizing: inherit; }
 
   color: #333;
-  //    font-size / line-heigth font-family
   font: 0.7em / 1 "Helvetica Neue", Helvetica, Arial, sans-serif;
   
   @media (min-width: 500px) {
@@ -29,8 +28,8 @@ body {
 
   background: white;
   border-radius: 15px;
-  padding: 0.5em;
-  max-width: 700px;
+  padding: 0.9em;
+  max-width: 600px;
   margin: auto;
 
   &:hover {
@@ -40,12 +39,10 @@ body {
   .itemLi {
 
     list-style-type: none;
-    margin-bottom: 10px;
-
+    height: 60px;
     display: flex;
-    
     align-items: center;
-    border: 1px black solid;
+    border-radius: 7px;
 
     div:first-of-type {
       text-align: center;
@@ -53,7 +50,6 @@ body {
       width: 3em;
     }
 
-    height: 70px;
 
     span {
       &.barred {
@@ -75,13 +71,14 @@ body {
       }
 
     }
+
+    &:hover {
+      background: linear-gradient(to left, $blue, $lightblue);
+      color: white;
+    }
     
   }
 
-  .itemLi:last-child {
 
-    margin-bottom: 0;
-
-  }
 
 }
