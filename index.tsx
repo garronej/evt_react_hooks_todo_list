@@ -73,7 +73,7 @@ const App: React.FunctionComponent<{ api: Api }> = ({api})=>{
           <input type="submit" value="Send"/>
         </div>
       </form>
-      <ul className="App">
+      <ul>
         {items.map(item=> {
 
             let props = itemLiProps.get(item);
