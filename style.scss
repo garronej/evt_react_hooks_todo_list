@@ -23,7 +23,6 @@ body {
   margin: 0;
 }
 
-
 .App {
 
   background: white;
@@ -53,9 +52,17 @@ body {
 
     > div:nth-of-type(2){
 
+      flex: 1;
+      margin-right: 10px;
+
       input {
-        width: 300px;
+        width: 90%;
       }
+
+      i {
+        margin-left: 5px;
+      }
+
 
       span {
         &.barred {
