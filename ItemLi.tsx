@@ -46,7 +46,8 @@ export const ItemLi: React.FunctionComponent<Props>=
     )
   );
 
-  const [isRequestUpdateNamePending, updateItemNameProxy ] = useRequest(
+  const [isRequestUpdateNamePending, updateItemNameProxy ] = 
+  useRequest(
     useCallback(
       (name: string)=> updateItemName({ name }), 
       [updateItemName] 
@@ -63,11 +64,32 @@ export const ItemLi: React.FunctionComponent<Props>=
 
 
   const [ evtIsEditing ] = useState(()=> Evt.create(false));
-  const [evtName] = useState(()=>Evt.create(name));
+  const [ evtName ] = useState(()=>Evt.create(name));
 
   useStatefulEvt([ evtName, evtIsEditing ]);
+  
 
   
+
+  /*
+  When the user is updating a todo item description
+  and stop tiping for 2 second, perform the update 
+  automatically. 
+
+  NOTE: It would be much easyer to have a simple 
+  imput and a button that the user would
+  click when he is done instead of this complicated
+  search hook but we use it anyway as the goal of this demo
+  is mainly to demonstrate how to use EVT with react.
+  */
+  const { searchNow } =useSearch({ 
+    "delay": 2000, 
+    "evtQuery": evtName, 
+    "search": updateItemNameProxy 
+  });
+
+  //When the update name request is no longer pending 
+  //switch the text input with the span.
   useEffect(()=>{
 
     if( isRequestUpdateNamePending ){
@@ -76,22 +98,7 @@ export const ItemLi: React.FunctionComponent<Props>=
 
     evtIsEditing.state = false;
 
-
   }, [isRequestUpdateNamePending]);
-  
-
-  /*
-  NOTE: It would be much easyer to have a simple 
-  imput and a button that the user would
-  click when he is done instead of this complicated
-  search hook but we use it anyway as the goal of this demo
-  is mainly to demonstrate how to use EVT with react.
-  */
-  const { searchNow } =useSearch({ 
-    "delay": 750, 
-    "evtQuery": evtName, 
-    "search": updateItemNameProxy 
-  });
 
   const onInputChange = useCallback(
     ({target}: React.ChangeEvent<HTMLInputElement>)=>
@@ -99,14 +106,19 @@ export const ItemLi: React.FunctionComponent<Props>=
     []
   );
 
+  //When the user press enter, update imediately. 
   const onInputKeyPress = useCallback(
     (event: React.KeyboardEvent<HTMLInputElement>)=> {
+
+      console.log(event);
 
       if( (event.keyCode || event.which)!==13){
         return;
       }
                       
       event.preventDefault();
+
+      console.log("coucou");
 
       searchNow();
 
