@@ -66,41 +66,49 @@ const App: React.FunctionComponent<{ api: Api }> = ({api})=>{
   );
 
   return (
-    <ul className="App">
-      {items.map(item=> {
+    <div className="App">
+      <form className="example">
+        <div className="wrapper">
+          <input type="text" id="text"/>
+          <input type="submit" value="Send"/>
+        </div>
+      </form>
+      <ul className="App">
+        {items.map(item=> {
 
-          let props = itemLiProps.get(item);
+            let props = itemLiProps.get(item);
 
-          if( !props ){
+            if( !props ){
 
-            const ctx = Evt.newCtx();
+              const ctx = Evt.newCtx();
 
-            props = {
-              "evtUpdate": evtItemUpdated.pipe(ctx,data=> data.item === item),
-              "updateItemDescription": ({ description })=> updateItemDescription({item, description}),
-              "updateItemIsCompleted": ({ isCompleted })=> updateItemIsCompleted({item, isCompleted}),
-              "deleteItem": ()=> deleteItem({item}),
-              "detach": ()=> ctx.done()
-            };
+              props = {
+                "evtUpdate": evtItemUpdated.pipe(ctx,data=> data.item === item),
+                "updateItemDescription": ({ description })=> updateItemDescription({item, description}),
+                "updateItemIsCompleted": ({ isCompleted })=> updateItemIsCompleted({item, isCompleted}),
+                "deleteItem": ()=> deleteItem({item}),
+                "detach": ()=> ctx.done()
+              };
 
-            itemLiProps.set(item, props);
+              itemLiProps.set(item, props);
+
+            }
+
+            return (
+              <ItemLi
+                key={item.id}
+                item={item}
+                evtUpdate={props.evtUpdate}
+                updateItemDescription={props.updateItemDescription}
+                updateItemIsCompleted={props.updateItemIsCompleted}
+                deleteItem={props.deleteItem}
+              />
+            );
 
           }
-
-          return (
-            <ItemLi
-              key={item.id}
-              item={item}
-              evtUpdate={props.evtUpdate}
-              updateItemDescription={props.updateItemDescription}
-              updateItemIsCompleted={props.updateItemIsCompleted}
-              deleteItem={props.deleteItem}
-            />
-          );
-
-        }
-      )}
-    </ul>
+        )}
+      </ul>
+    </div>
   );
 
 };

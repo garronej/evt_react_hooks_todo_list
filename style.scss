@@ -25,72 +25,87 @@ body {
 
 .App {
 
-  background: white;
-  border-radius: 15px;
-  padding: 0.9em;
-  max-width: 600px;
-  margin: 10vh auto 0;
+  
 
-  &:hover {
-    box-shadow: 4px 4px 50px rgba(#687bf7, 0.6);
+    background: white;
+    border-radius: 15px;
+    padding: 0.9em;
+    max-width: 600px;
+    margin: 10vh auto 0;
+
+  form {
+    border: 1px black solid;
   }
 
-  .itemLi {
+  ul {
 
-    list-style-type: none;
-    height: 60px;
-    display: flex;
-    align-items: center;
-    border-radius: 7px;
-
-    > div:first-of-type {
-      text-align: center;
-      display: inline-block;
-      width: 3em;
-    }
+    border: black 1px solid;
 
 
-    > div:nth-of-type(2){
-
-      flex: 1;
-      margin-right: 10px;
-
-      input {
-        width: 90%;
-      }
-
-      i {
-        margin-left: 5px;
-      }
-
-
-      span {
-        &.barred {
-          text-decoration: line-through;
-        }
-      }
-    }
-
-    > div:last-of-type {
-      margin-left: auto;
-      margin-right: 1em;
-
-
-      button {
-        all: unset;
-        cursor: pointer;
-        i {
-          color: red;
-        }
-      }
-
-    }
 
     &:hover {
-      background: linear-gradient(to left, $blue, $lightblue);
-      color: white;
+      box-shadow: 4px 4px 50px rgba(#687bf7, 0.6);
     }
-    
+
+    .itemLi {
+
+      list-style-type: none;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      border-radius: 7px;
+
+      > div:first-of-type {
+        text-align: center;
+        display: inline-block;
+        width: 3em;
+      }
+
+
+      > div:nth-of-type(2){
+
+        flex: 1;
+        margin-right: 10px;
+
+        input {
+          //TODO: Investigate why I can't use flex
+          width: 90%;
+        }
+
+        i {
+          margin-left: 5px;
+        }
+
+
+        span {
+          &.barred {
+            text-decoration: line-through;
+          }
+        }
+      }
+
+      > div:last-of-type {
+        margin-left: auto;
+        margin-right: 1em;
+
+
+        button {
+          all: unset;
+          cursor: pointer;
+          i {
+            color: red;
+          }
+        }
+
+      }
+
+      &:hover {
+        background: linear-gradient(to left, $blue, $lightblue);
+        color: white;
+      }
+      
+    }
+
   }
 
 
