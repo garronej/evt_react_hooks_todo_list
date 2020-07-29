@@ -149,7 +149,7 @@ export const ItemLi: React.FunctionComponent<Props>= (props)=>{
             onChange={onInputChange}
             onKeyPress={onInputKeyPress}
             readOnly={isRequestUpdateDescriptionPending}
-            onBlur={searchNow}
+            //onBlur={searchNow}
             autoFocus
           />
           {isRequestUpdateDescriptionPending && <Spinner />}
