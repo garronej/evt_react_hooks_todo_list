@@ -30,7 +30,7 @@ const App: React.FunctionComponent<{ api: Api }> = ({api})=>{
     evtDeletedItem, 
     evtItemUpdated,
     deleteItem, 
-    updateItemName, 
+    updateItemDescription, 
     updateItemIsCompleted 
   } = api;
 
@@ -77,7 +77,7 @@ const App: React.FunctionComponent<{ api: Api }> = ({api})=>{
 
             props = {
               "evtUpdate": evtItemUpdated.pipe(ctx,data=> data.item === item),
-              "updateItemName": ({ name })=> updateItemName({item, name}),
+              "updateItemDescription": ({ description })=> updateItemDescription({item, description}),
               "updateItemIsCompleted": ({ isCompleted })=> updateItemIsCompleted({item, isCompleted}),
               "deleteItem": ()=> deleteItem({item}),
               "detach": ()=> ctx.done()
@@ -92,7 +92,7 @@ const App: React.FunctionComponent<{ api: Api }> = ({api})=>{
               key={item.id}
               item={item}
               evtUpdate={props.evtUpdate}
-              updateItemName={props.updateItemName}
+              updateItemDescription={props.updateItemDescription}
               updateItemIsCompleted={props.updateItemIsCompleted}
               deleteItem={props.deleteItem}
             />

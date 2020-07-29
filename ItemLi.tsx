@@ -7,19 +7,17 @@ import { useEvt, useStatefulEvt } from "evt/hooks";
 import { useRequest } from "./hooks/useRequest";
 import { useSearch } from "./hooks/useSearch";
 
-// https://static.semasim.com/css/icons.css
-
-
 export type Props = {
   item: Omit<Item, "id">;
-  evtUpdate: NonPostableEvt<{ updateType: "NAME" | "IS COMPLETED";  }>;
-  updateItemName(params: { name: string; }): Promise<void>;
+  evtUpdate: NonPostableEvt<{ updateType: "DESCRIPTION" | "IS COMPLETED";  }>;
+  updateItemDescrption(params: { descrption: string; }): Promise<void>;
   updateItemIsCompleted(params: { isCompleted: boolean; }): Promise<void>;
   deleteItem(): Promise<void>;
 };
 
-export const ItemLi: React.FunctionComponent<Props>= 
- ({item, evtUpdate, updateItemName, updateItemIsCompleted, deleteItem})=>{
+export const ItemLi: React.FunctionComponent<Props>= (props)=>{
+
+  const { items } = props;
 
   {
 
@@ -36,37 +34,37 @@ export const ItemLi: React.FunctionComponent<Props>=
 
   }description
 
-  const { name, isCompleted } = item;
+  const { description, isCompleted } = item;
 
-  const [isRequestUpdateIsCompletePending, updateItemIsCompletedProxy ] = 
+  const [isRequestUpdateIsCompletePending, updateItemIsCompleted ] = 
   useRequest(  
     useCallback(
-      ()=> updateItemIsCompleted({ "isCompleted": !item.isCompleted }), 
-      [updateItemIsCompleted, item] 
+      ()=> props.updateItemIsCompleted({ "isCompleted": !item.isCompleted }), 
+      [props.updateItemIsCompleted, item] 
     )
   );
 
-  const [isRequestUpdateNamePending, updateItemNameProxy ] = 
+  const [isRequestUpdateDescriptionPending, updateItemDescription] = 
   useRequest(
     useCallback(
-      (name: string)=> updateItemName({ name }), 
-      [updateItemName] 
-    )description
+      (description: string)=> props.updateItemName({ description }), 
+      [props.updateItemDescription] 
+    )
   );
 
-  const [isRequestDeleteItemPending, deleteItemProxy ]
+  const [isRequestDeleteItemPending, deleteItem]
   = useRequest(
     useCallback(
-      ()=> deleteItem(),
-      [deleteItem]
+      ()=> props.deleteItem(),
+      [props.deleteItem]
     )
   );
 
 
   const [ evtIsEditing ] = useState(()=> Evt.create(false));
-  const [ evtName ] = useState(()=>Evt.create(name));
+  const [ evtNewDescription ] = useState(()=>Evt.create(description));
 
-  useStatefulEvt([ evtName, evtIsEditing ]);
+  useStatefulEvt([ evtNewDescription, evtIsEditing ]);
   
   /*
   When the user is updating a todo item description
@@ -81,25 +79,24 @@ export const ItemLi: React.FunctionComponent<Props>=
   */
   const { searchNow } =useSearch({ 
     "delay": 2000, 
-    "evtQuery": evtName, 
-    "search": updateItemNameProxy 
+    "evtQuery": evtNewDescription, 
+    "search": updateItemDescription 
   });
 
-  //When the update name request is no longer pending 
-  //switch the text input with the span.
+  //Automatically switch from the input text to the span
   useEffect(()=>{
 
-    if( isRequestUpdateNamePending ){
+    if( isRequestUpdateDescriptionPending ){
       return;
     }
 
     evtIsEditing.state = false;
 
-  }, [isRequestUpdateNamePending]);
+  }, [isRequestUpdateDescriptionPending]);
 
-description  const onInputChange = useCallback(
+  const onInputChange = useCallback(
     ({target}: React.ChangeEvent<HTMLInputElement>)=>
-      evtName.state = target.value,
+      evtNewDescription.state = target.value,
     []
   );
 
@@ -133,7 +130,7 @@ description  const onInputChange = useCallback(
           <input
             type="checkbox"
             checked={isCompleted}
-            onChange={updateItemIsCompletedProxy}
+            onChange={updateItemIsCompleted}
             readOnly={isRequestUpdateIsCompletePending}           
           />
       }
@@ -146,19 +143,19 @@ description  const onInputChange = useCallback(
         <div>
           <input
             type="text"
-            value={evtName.state}
+            value={evtNewDescription.state}
             onChange={onInputChange}
             onKeyPress={onInputKeyPress}
-            readOnly={isRequestUpdateNamePending}
+            readOnly={isRequestUpdateDescriptionPending}
             onBlur={searchNow}
             autoFocus
           />
-          {isRequestUpdateNamePending && <Spinner />}
+          {isRequestUpdateDescriptionPending && <Spinner />}
         </div>):
         <span 
           className={isCompleted?"barred":""} 
           onClick={onSpanClick}
-        >{name}</span>
+        >{description}</span>
       }
       </div>
 
@@ -166,7 +163,7 @@ description  const onInputChange = useCallback(
       {
         isRequestDeleteItemPending ? 
           <Spinner /> :
-          <button onClick={deleteItemProxy}>
+          <button onClick={deleteItem}>
             <i className="fa fa-trash-o" />
           </button>
       }

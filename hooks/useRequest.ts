@@ -4,7 +4,7 @@ import * as runExclusive from "run-exclusive";
 
 
 /** 
- * Returns [ isRequestPending, makeRequestProxy ] 
+ * Returns [ isRequestPending, makeRequestProxy, [<lastRequestResult>?] ] 
  * 
  * Take a function that takes some time to complete
  * and return a function that return void instead of Promise<U>
