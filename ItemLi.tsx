@@ -26,7 +26,11 @@ export const ItemLi: React.FunctionComponent<Props>=
     const [,forceUpdate]= useReducer(x=>x+1,0);
 
     useEvt(
-      ctx=> { evtUpdate.attach(ctx, ()=> forceUpdate()); },
+      ctx=> { 
+        evtUpdate.attach(ctx, 
+          ()=> Promise.resolve(()=> forceUpdate()) 
+        ); 
+      },
       [item, evtUpdate]
     );
 
@@ -107,7 +111,7 @@ export const ItemLi: React.FunctionComponent<Props>=
       }
       </div>
 
-      
+      {/*
       <div>
         <input
             type="text"
@@ -115,13 +119,14 @@ export const ItemLi: React.FunctionComponent<Props>=
             onChange={useCallback(({target})=>evtName.state = target.value,[])}
            />
       </div>
+      */}
 
       
       
       
 
       
-      {/*
+
       <div>
       {
         evtIsEditing.state ?(
@@ -139,7 +144,7 @@ export const ItemLi: React.FunctionComponent<Props>=
         >{name}</span>
       }
       </div>
-      */}
+
       
       
 
