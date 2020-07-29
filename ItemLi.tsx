@@ -86,6 +86,8 @@ export const ItemLi: React.FunctionComponent<Props>= (props)=>{
   //Automatically switch from the input text to the span
   useEffect(()=>{
 
+    console.log({ isRequestUpdateDescriptionPending })
+
     if( isRequestUpdateDescriptionPending ){
       return;
     }
