@@ -13,7 +13,8 @@ import { useEvt } from "evt/hooks";
  * Returns a function "searchNow" that, when called, trigger the search
  * with the current querry and cancel the schedulled search.
  * 
- * equivalent in RxJS: https://youtu.be/Urv82SGIu_0?t=1103
+ * Same idea in RxJS: https://youtu.be/Urv82SGIu_0?t=1103,
+ * this implementation is more robust though.
  */
 export function useSearch(
   params: { 
@@ -24,8 +25,8 @@ export function useSearch(
 ): { searchNow(): void; } {
 
   const { delay, evtQuery, search } = params;
-
-  useEvt(
+  
+  const { searchNow }= useEvt(
     ctx=>{
 
       const evtTextDebounced = Evt.create(evtQuery.state);
@@ -33,10 +34,13 @@ export function useSearch(
       let timer: number;
 
       evtQuery
-        .pipe(ctx, text => text.length > 2)
-        .attach(async text=>{
+        .attach(ctx, async text=>{
 
           clearTimeout(timer);
+
+          if( text.length < 3 ){
+            return;
+          }
 
           await new Promise(resolve=> timer = setTimeout(resolve, delay));
           
@@ -44,21 +48,26 @@ export function useSearch(
 
         });
 
-      evtTextDebounced.evtChange.attach(ctx, search);
+      //No need to bound to ctx here, evtTextDebounced is local.
+      evtTextDebounced.evtChange.attach(search);
 
+      //We dont want a search to be performed after the componenent
+      //have been unmounted (ot the search function has changed...). 
       ctx.evtDoneOrAborted.attachOnce(()=> clearTimeout(timer));
+
+      //So that the search can be triggered when the user hit enter
+      //for example.
+      const searchNow = ()=> {
+        clearTimeout(timer);
+        search(evtQuery.state);
+      };
+
+      return { searchNow };
 
     },
     [evtQuery, search]
   );
 
-
-  return { 
-    "searchNow": ()=> {
-      clearTimeout(timer);
-      search(evtQuery.state);
-    }
-  };
-
+  return { searchNow };
 
 }
