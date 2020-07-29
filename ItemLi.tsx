@@ -10,14 +10,14 @@ import { useSearch } from "./hooks/useSearch";
 export type Props = {
   item: Omit<Item, "id">;
   evtUpdate: NonPostableEvt<{ updateType: "DESCRIPTION" | "IS COMPLETED";  }>;
-  updateItemDescrption(params: { descrption: string; }): Promise<void>;
+  updateItemDescription(params: { description: string; }): Promise<void>;
   updateItemIsCompleted(params: { isCompleted: boolean; }): Promise<void>;
   deleteItem(): Promise<void>;
 };
 
 export const ItemLi: React.FunctionComponent<Props>= (props)=>{
 
-  const { items } = props;
+  const { item, evtUpdate } = props;
 
   {
 
@@ -32,7 +32,7 @@ export const ItemLi: React.FunctionComponent<Props>= (props)=>{
       [item, evtUpdate]
     );
 
-  }description
+  }
 
   const { description, isCompleted } = item;
 
@@ -47,7 +47,7 @@ export const ItemLi: React.FunctionComponent<Props>= (props)=>{
   const [isRequestUpdateDescriptionPending, updateItemDescription] = 
   useRequest(
     useCallback(
-      (description: string)=> props.updateItemName({ description }), 
+      (description: string)=> props.updateItemDescription({ description }), 
       [props.updateItemDescription] 
     )
   );
