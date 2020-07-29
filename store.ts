@@ -3,7 +3,7 @@ import  { Evt, NonPostableEvt, ToPostableEvt, StatefulReadonlyEvt } from "evt";
 
 type MutableItem= {
   id: string;
-  name: string;
+  description: string;
   isCompleted: boolean;
 };
 
@@ -12,13 +12,15 @@ export interface Item extends Readonly<MutableItem> {}
 export type Api ={
   readonly items: Readonly<Item[]>;
 
+  /* Evts to notify when the items has changed */
   evtNewItem: NonPostableEvt<{ item: Item; }>;
   evtDeletedItem: NonPostableEvt<{ item: Item; }>;
-  evtItemUpdated: NonPostableEvt<{ item: Item; updateType: "NAME" | "IS COMPLETED"; }>;
+  evtItemUpdated: NonPostableEvt<{ item: Item; updateType: "DESCRIPTION" | "IS COMPLETED"; }>;
 
-  createItem(params: { name: string; isCompleted: boolean; }): Promise<void>;
+  /* Function for changing the items */
+  createItem(params: { description: string; isCompleted: boolean; }): Promise<void>;
   deleteItem(params: { item: Item; }): Promise<void>;
-  updateItemName(params: { item: Item; name: string; }): Promise<void>;
+  updateItemDescription(params: { item: Item; description: string; }): Promise<void>;
   updateItemIsCompleted(params: { item: Item; isCompleted: boolean; }): Promise<void>;
 };
 
@@ -37,10 +39,10 @@ export async function getMockApi(): Promise<Api> {
   await simulateNetworkDelay(100);
 
   const items: MutableItem[]= [
-    { "id": getNewId(), "name": "🚀 Understand the useEvt hook", "isCompleted": false },
-    { "id": getNewId(), "name": "⭐ Understand the useStatefulEvt hook", "isCompleted": false },
-    { "id": getNewId(), "name": "🔒 Checkout run-exclusive, usefull for network requests", "isCompleted": false },
-    { "id": getNewId(), "name": "💧 Acknowledge that EVT works well with React Hooks", "isCompleted": true },
+    { "id": getNewId(), "description": "🚀 Understand the useEvt hook", "isCompleted": false },
+    { "id": getNewId(), "description": "⭐ Understand the useStatefulEvt hook", "isCompleted": false },
+    { "id": getNewId(), "description": "🔒 Checkout run-exclusive, usefull for network requests", "isCompleted": false },
+    { "id": getNewId(), "description": "💧 Acknowledge that EVT works well with React Hooks", "isCompleted": true },
 
   ];
 
@@ -49,13 +51,13 @@ export async function getMockApi(): Promise<Api> {
     "evtNewItem": new Evt(),
     "evtDeletedItem": new Evt(),
     "evtItemUpdated": new Evt(),
-    "createItem": async ({ name, isCompleted })=> {
+    "createItem": async ({ description, isCompleted })=> {
 
         await simulateNetworkDelay();
 
         const item: Item = {
           "id": getNewId(),
-          name, 
+          description, 
           isCompleted
         };
 
@@ -74,13 +76,13 @@ export async function getMockApi(): Promise<Api> {
         api.evtDeletedItem.post({ item });
 
     },
-    "updateItemName": async ({ item, name }) => {
+    "updateItemName": async ({ item, description }) => {
 
         await simulateNetworkDelay();
 
-        (item as MutableItem).name = name;
+        (item as MutableItem).description = name;
 
-        api.evtItemUpdated.post({ item, "updateType": "NAME" });
+        api.evtItemUpdated.post({ item, "updateType": "DESCRIPTION" });
 
     },
         "updateItemIsCompleted": async ({ item, isCompleted }) => {

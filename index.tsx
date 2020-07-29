@@ -106,8 +106,8 @@ const App: React.FunctionComponent<{ api: Api }> = ({api})=>{
 };
 
 reactDom.render(
-  <React.StrictMode>
-    <SplashScreen />
-  </React.StrictMode>, 
+  //<React.StrictMode>
+    <SplashScreen />,
+  //</React.StrictMode>, 
   document.getElementById("root")
 );

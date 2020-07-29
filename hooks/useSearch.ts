@@ -62,6 +62,8 @@ export function useSearch(
         search(evtQuery.state);
       };
 
+      searchNow["mark"]= Date.now();
+
       return { searchNow };
 
     },

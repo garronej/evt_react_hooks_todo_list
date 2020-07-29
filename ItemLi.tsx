@@ -34,7 +34,7 @@ export const ItemLi: React.FunctionComponent<Props>=
       [item, evtUpdate]
     );
 
-  }
+  }description
 
   const { name, isCompleted } = item;
 
@@ -51,7 +51,7 @@ export const ItemLi: React.FunctionComponent<Props>=
     useCallback(
       (name: string)=> updateItemName({ name }), 
       [updateItemName] 
-    )
+    )description
   );
 
   const [isRequestDeleteItemPending, deleteItemProxy ]
@@ -97,7 +97,7 @@ export const ItemLi: React.FunctionComponent<Props>=
 
   }, [isRequestUpdateNamePending]);
 
-  const onInputChange = useCallback(
+description  const onInputChange = useCallback(
     ({target}: React.ChangeEvent<HTMLInputElement>)=>
       evtName.state = target.value,
     []
@@ -150,6 +150,7 @@ export const ItemLi: React.FunctionComponent<Props>=
             onChange={onInputChange}
             onKeyPress={onInputKeyPress}
             readOnly={isRequestUpdateNamePending}
+            onBlur={searchNow}
             autoFocus
           />
           {isRequestUpdateNamePending && <Spinner />}
