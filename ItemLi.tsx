@@ -38,7 +38,8 @@ export const ItemLi: React.FunctionComponent<Props>=
 
   const { name, isCompleted } = item;
 
-  const [isRequestUpdateIsCompletePending, updateItemIsCompletedProxy ] = useRequest(  
+  const [isRequestUpdateIsCompletePending, updateItemIsCompletedProxy ] = 
+  useRequest(  
     useCallback(
       ()=> updateItemIsCompleted({ "isCompleted": !item.isCompleted }), 
       [updateItemIsCompleted, item] 
@@ -79,22 +80,44 @@ export const ItemLi: React.FunctionComponent<Props>=
   }, [isRequestUpdateNamePending]);
   
 
-
-
   /*
   NOTE: It would be much easyer to have a simple 
-  imput and a button that the user would have to
+  imput and a button that the user would
   click when he is done instead of this complicated
-  hook but it use it anyway as the goal of this demo
+  search hook but we use it anyway as the goal of this demo
   is mainly to demonstrate how to use EVT with react.
   */
-
-  useSearch({ 
+  const { searchNow } =useSearch({ 
     "delay": 750, 
     "evtQuery": evtName, 
     "search": updateItemNameProxy 
   });
 
+  const onInputChange = useCallback(
+    ({target}: React.ChangeEvent<HTMLInputElement>)=>
+      evtName.state = target.value,
+    []
+  );
+
+  const onInputKeyPress = useCallback(
+    (event: React.KeyboardEvent<HTMLInputElement>)=> {
+
+      if( (event.keyCode || event.which)!==13){
+        return;
+      }
+                      
+      event.preventDefault();
+
+      searchNow();
+
+    },
+    []
+  );
+
+  const onSpanClick = useCallback(
+    ()=> evtIsEditing.state = true,
+    []
+  );
   
   return (
     <li className="itemLi">
@@ -106,49 +129,33 @@ export const ItemLi: React.FunctionComponent<Props>=
             type="checkbox"
             checked={isCompleted}
             onChange={updateItemIsCompletedProxy}
+            onKeyPress={onInputKeyPress}
             readOnly={isRequestUpdateIsCompletePending}
+
           />
       }
       </div>
 
-      {/*
-      <div>
-        <input
-            type="text"
-            value={evtName.state}
-            onChange={useCallback(({target})=>evtName.state = target.value,[])}
-           />
-      </div>
-      */}
-
-      
-      
-      
-
-      
 
       <div>
       {
         evtIsEditing.state ?(
         <div>
-          {isRequestUpdateNamePending && <Spinner />}
           <input
             type="text"
             value={evtName.state}
-            onChange={useCallback(({target})=>evtName.state = target.value,[])}
-           />
+            onChange={onInputChange}
+            readOnly={isRequestUpdateNamePending}
+          />
+          {isRequestUpdateNamePending && <Spinner />}
         </div>):
         <span 
           className={isCompleted?"barred":""} 
-          onClick={useCallback(()=> evtIsEditing.state = true,[])}
+          onClick={onSpanClick}
         >{name}</span>
       }
       </div>
 
-      
-      
-
-  
       <div>
       {
         isRequestDeleteItemPending ? 
