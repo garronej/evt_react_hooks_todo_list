@@ -110,15 +110,11 @@ export const ItemLi: React.FunctionComponent<Props>=
   const onInputKeyPress = useCallback(
     (event: React.KeyboardEvent<HTMLInputElement>)=> {
 
-      console.log(event);
-
-      if( (event.keyCode || event.which)!==13){
+      if( event.key !== "Enter" ){
         return;
       }
                       
       event.preventDefault();
-
-      console.log("coucou");
 
       searchNow();
 
@@ -141,10 +137,7 @@ export const ItemLi: React.FunctionComponent<Props>=
             type="checkbox"
             checked={isCompleted}
             onChange={updateItemIsCompletedProxy}
-            onKeyUp={onInputKeyPress}
-            readOnly={isRequestUpdateIsCompletePending}
-            autoFocus
-                      
+            readOnly={isRequestUpdateIsCompletePending}           
           />
       }
       </div>
@@ -158,7 +151,9 @@ export const ItemLi: React.FunctionComponent<Props>=
             type="text"
             value={evtName.state}
             onChange={onInputChange}
+            onKeyPress={onInputKeyPress}
             readOnly={isRequestUpdateNamePending}
+            autoFocus
           />
           {isRequestUpdateNamePending && <Spinner />}
         </div>):
