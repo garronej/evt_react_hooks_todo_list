@@ -10,8 +10,8 @@ import { useEvt } from "evt/hooks";
  * 
  * Request are not made with text that are not at least 3 character long.
  * 
- * Returns a function "searchNow" that, when called, trigger the search
- * with the current querry and cancel the schedulled search.
+ * Returns a function "searchNowWithCurrentQuery" that, when called, 
+ * trigger the search with the current querry and cancel the schedulled search.
  * 
  * Same idea in RxJS: https://youtu.be/Urv82SGIu_0?t=1103,
  * this implementation is more robust though.
@@ -22,11 +22,11 @@ export function useSearch(
     evtQuery: StatefulReadonlyEvt<string>, 
     search(text: string): void;
   }
-): { searchNow(): void; } {
+): { searchNowWithCurrentQuery(): void; } {
 
   const { delay, evtQuery, search } = params;
   
-  const { searchNow }= useEvt(
+  const { searchNowWithCurrentQuery }= useEvt(
     ctx=>{
 
       const evtTextDebounced = Evt.create(evtQuery.state);
@@ -57,19 +57,17 @@ export function useSearch(
 
       //So that the search can be triggered when the user hit enter
       //for example.
-      const searchNow = ()=> {
+      const searchNowWithCurrentQuery = ()=> {
         clearTimeout(timer);
         search(evtQuery.state);
       };
 
-      searchNow["mark"]= Date.now();
-
-      return { searchNow };
+      return { searchNowWithCurrentQuery };
 
     },
     [evtQuery, search]
   );
 
-  return { searchNow };
+  return { searchNowWithCurrentQuery };
 
 }

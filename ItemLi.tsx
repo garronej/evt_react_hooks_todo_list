@@ -77,7 +77,7 @@ export const ItemLi: React.FunctionComponent<Props>= (props)=>{
   search hook but we use it anyway as the goal of this demo
   is mainly to demonstrate how to use EVT with react.
   */
-  const { searchNow } =useSearch({ 
+  const { searchNowWithCurrentQuery: updateItemDescriptionNow } =useSearch({ 
     "delay": 2000, 
     "evtQuery": evtNewDescription, 
     "search": updateItemDescription 
@@ -85,8 +85,6 @@ export const ItemLi: React.FunctionComponent<Props>= (props)=>{
 
   //Automatically switch from the input text to the span
   useEffect(()=>{
-
-    console.log({ isRequestUpdateDescriptionPending })
 
     if( isRequestUpdateDescriptionPending ){
       return;
@@ -112,7 +110,7 @@ export const ItemLi: React.FunctionComponent<Props>= (props)=>{
                       
       event.preventDefault();
 
-      searchNow();
+      updateItemDescriptionNow();
 
     },
     []
@@ -149,7 +147,7 @@ export const ItemLi: React.FunctionComponent<Props>= (props)=>{
             onChange={onInputChange}
             onKeyPress={onInputKeyPress}
             readOnly={isRequestUpdateDescriptionPending}
-            //onBlur={searchNow}
+            onBlur={updateItemDescriptionNow}
             autoFocus
           />
           {isRequestUpdateDescriptionPending && <Spinner />}

@@ -76,16 +76,24 @@ export async function getMockApi(): Promise<Api> {
         api.evtDeletedItem.post({ item });
 
     },
-    "updateItemName": async ({ item, description }) => {
+    "updateItemDescription": async ({ item, description }) => {
+
+        if( item.description === description ){
+          return;
+        }
 
         await simulateNetworkDelay();
 
-        (item as MutableItem).description = name;
+        (item as MutableItem).description = description;
 
         api.evtItemUpdated.post({ item, "updateType": "DESCRIPTION" });
 
     },
-        "updateItemIsCompleted": async ({ item, isCompleted }) => {
+    "updateItemIsCompleted": async ({ item, isCompleted }) => {
+
+        if( item.isCompleted === isCompleted ){
+          return;
+        }
 
         await simulateNetworkDelay();
 
