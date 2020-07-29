@@ -68,9 +68,6 @@ export const ItemLi: React.FunctionComponent<Props>=
 
   useStatefulEvt([ evtName, evtIsEditing ]);
   
-
-  
-
   /*
   When the user is updating a todo item description
   and stop tiping for 2 second, perform the update 
