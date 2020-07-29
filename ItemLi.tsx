@@ -141,9 +141,10 @@ export const ItemLi: React.FunctionComponent<Props>=
             type="checkbox"
             checked={isCompleted}
             onChange={updateItemIsCompletedProxy}
-            onKeyPress={onInputKeyPress}
+            onKeyUp={onInputKeyPress}
             readOnly={isRequestUpdateIsCompletePending}
-
+            autoFocus
+                      
           />
       }
       </div>
