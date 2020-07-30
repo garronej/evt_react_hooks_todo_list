@@ -1,4 +1,4 @@
-# A TODO list with EVT and React Hooks.
+# A TODO list with EVT and React Hooks
 
 [App live](https://evt-react-hooks-todo-list.stackblitz.io/)
 
