@@ -3,8 +3,8 @@ import * as reactDom from "react-dom";
 import "./style.scss";
 
 import { ItemLi, Props as ItemLiProps } from "./ItemLi";
-import { Item, getMockApi, Api } from "./store";
-import { useEvt } from "evt/hooks";
+import { Item, getMockApi, Api } from "./logic";
+import { useEvt, useStatefulEvt } from "evt/hooks";
 import { Evt } from "evt";
 import { useRequest } from "./hooks/useRequest";
 
@@ -31,7 +31,8 @@ const App: React.FunctionComponent<{ api: Api }> = ({api})=>{
     evtItemUpdated,
     deleteItem, 
     updateItemDescription, 
-    updateItemIsCompleted 
+    updateItemIsCompleted,
+    createItem
   } = api;
 
   {
@@ -65,11 +66,47 @@ const App: React.FunctionComponent<{ api: Api }> = ({api})=>{
     [ evtDeletedItem ]
   );
 
+  const [ evtNewItemDescription ] = useState(()=> Evt.create(""));
+  useStatefulEvt([evtNewItemDescription]);
+
+  /*
+  const onInputKeyPress = useCallback(
+    (event: React.KeyboardEvent<HTMLInputElement>)=> {
+
+      if( event.key !== "Enter" ){
+        return;
+      }
+                      
+      event.preventDefault();
+
+      updateItemDescriptionNow();
+
+    },
+    []
+  );
+  */
+
   return (
     <div className="App">
-      <form className="example">
+      <form
+      onSubmit={useCallback(event=> { 
+        event.preventDefault();
+
+        evtNewItemDescription.state = "";
+
+        
+
+        console.log("here");
+        
+      },[])}
+      >
         <div className="wrapper">
-          <input type="text"/>
+          <input 
+            type="text" 
+            value={evtNewItemDescription.state}
+            onChange={useCallback(({target})=> evtNewItemDescription.state= target.value,[])}
+            placeholder="Describe a new thing to do..."
+          />
           <input type="submit" value="Add"/>
         </div>
       </form>
