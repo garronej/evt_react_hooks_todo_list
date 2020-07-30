@@ -41,17 +41,26 @@ body {
 
     display: flex;
 
-    border: 1px black solid;
+
+    $border: 1px solid $blue;
+    $border-radius: 10px;
 
     input[type="text"] {
       flex: 1 1 auto;
       line-height: 2;
+      padding-left: 10px;
+      border: $border;
+      border-radius: $border-radius 0 0 $border-radius;
+      border-right: none;
     }
 
     input[type="submit"] {
       color: white;
       background-color: $blue;
       cursor: pointer;
+      border: $border;
+      border-radius: 0 $border-radius $border-radius 0;
+      padding: 0 15px 0 15px;
     }
 
     > * {
