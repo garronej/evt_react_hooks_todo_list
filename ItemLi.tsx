@@ -6,6 +6,7 @@ import { useEvt, useStatefulEvt } from "evt/hooks";
 
 import { useRequest } from "./hooks/useRequest";
 import { useSearch } from "./hooks/useSearch";
+import { Spinner } from "./Spinner";
 
 export type Props = {
   item: Omit<Item, "id">;
@@ -175,4 +176,3 @@ export const ItemLi: React.FunctionComponent<Props>= (props)=>{
 
 };
 
-const Spinner: React.FunctionComponent = ()=> <i className="fa fa-spin fa-spinner" />;

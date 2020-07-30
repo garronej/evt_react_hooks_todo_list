@@ -52,15 +52,18 @@ body {
       border: $border;
       border-radius: $border-radius 0 0 $border-radius;
       border-right: none;
+      &:focus {
+        outline: none;
+      }
     }
 
-    input[type="submit"] {
+    button {
       color: white;
       background-color: $blue;
       cursor: pointer;
       border: $border;
       border-radius: 0 $border-radius $border-radius 0;
-      padding: 0 15px 0 15px;
+      min-width: 60px;
     }
 
     > * {

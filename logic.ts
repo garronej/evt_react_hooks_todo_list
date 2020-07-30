@@ -61,7 +61,7 @@ export async function getMockApi(): Promise<Api> {
           isCompleted
         };
 
-        items.push(item);
+        items.unshift(item);
 
         api.evtNewItem.post({item});
 

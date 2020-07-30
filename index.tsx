@@ -7,6 +7,7 @@ import { Item, getMockApi, Api } from "./logic";
 import { useEvt, useStatefulEvt } from "evt/hooks";
 import { Evt } from "evt";
 import { useRequest } from "./hooks/useRequest";
+import { Spinner } from "./Spinner";
 
 
 
@@ -32,7 +33,6 @@ const App: React.FunctionComponent<{ api: Api }> = ({api})=>{
     deleteItem, 
     updateItemDescription, 
     updateItemIsCompleted,
-    createItem
   } = api;
 
   {
@@ -69,22 +69,13 @@ const App: React.FunctionComponent<{ api: Api }> = ({api})=>{
   const [ evtNewItemDescription ] = useState(()=> Evt.create(""));
   useStatefulEvt([evtNewItemDescription]);
 
-  /*
-  const onInputKeyPress = useCallback(
-    (event: React.KeyboardEvent<HTMLInputElement>)=> {
 
-      if( event.key !== "Enter" ){
-        return;
-      }
-                      
-      event.preventDefault();
-
-      updateItemDescriptionNow();
-
-    },
-    []
+  const [isCreateItemRequestPending, createItem]=useRequest(
+    useCallback(
+      api.createItem,
+    [api.createItem]
+    )
   );
-  */
 
   return (
     <div className="App">
@@ -92,14 +83,16 @@ const App: React.FunctionComponent<{ api: Api }> = ({api})=>{
       onSubmit={useCallback(event=> { 
         event.preventDefault();
 
+        createItem({
+          "description": evtNewItemDescription.state,
+          "isCompleted": false
+        });
+
         evtNewItemDescription.state = "";
 
-        
-
-        console.log("here");
-        
-      },[])}
+      },[createItem])}
       >
+
         <div className="wrapper">
           <input 
             type="text" 
@@ -107,7 +100,10 @@ const App: React.FunctionComponent<{ api: Api }> = ({api})=>{
             onChange={useCallback(({target})=> evtNewItemDescription.state= target.value,[])}
             placeholder="Describe a new thing to do..."
           />
-          <input type="submit" value="Add"/>
+          <button type="submit">
+            {isCreateItemRequestPending?<Spinner />:"Add"}
+          </button>
+          
         </div>
       </form>
       <ul>
