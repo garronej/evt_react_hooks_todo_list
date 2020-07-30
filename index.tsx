@@ -101,7 +101,11 @@ const App: React.FunctionComponent<{ api: Api }> = ({api})=>{
             type="text" 
             value={evtNewItemDescription.state}
             onChange={useCallback(({target})=> evtNewItemDescription.state= target.value,[])}
-            placeholder="Describe a new thing to do..."
+            placeholder={
+              isCreateItemRequestPending?
+              "Loading...":
+              "Describe a new thing to do..."
+            }
           />
           <button type="submit">
             {isCreateItemRequestPending?<Spinner />:"Add"}
