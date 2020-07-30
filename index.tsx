@@ -69,8 +69,8 @@ const App: React.FunctionComponent<{ api: Api }> = ({api})=>{
     <div className="App">
       <form className="example">
         <div className="wrapper">
-          <input type="text" id="text"/>
-          <input type="submit" value="Send"/>
+          <input type="text"/>
+          <input type="submit" value="Add"/>
         </div>
       </form>
       <ul>
