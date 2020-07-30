@@ -95,6 +95,18 @@ export const ItemLi: React.FunctionComponent<Props>= (props)=>{
 
   }, [isRequestUpdateDescriptionPending]);
 
+  //For animation.
+  const [isShowClassApplyed, setIsShowClassApplyed ] = useState(false);
+
+  useEffect(()=>{
+    
+    const timer = setTimeout(()=> setIsShowClassApplyed(true),20);
+
+    return ()=> { clearTimeout(timer); };    
+
+  },[]);
+  
+
   const onInputChange = useCallback(
     ({target}: React.ChangeEvent<HTMLInputElement>)=>
       evtNewDescription.state = target.value,
@@ -121,9 +133,11 @@ export const ItemLi: React.FunctionComponent<Props>= (props)=>{
     ()=> evtIsEditing.state = true,
     []
   );
+
+  
   
   return (
-    <li className="itemLi">
+    <li className={`itemLi${isShowClassApplyed ? " show":""}`}>
       <div>
       {
         isRequestUpdateIsCompletePending ? 

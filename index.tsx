@@ -1,4 +1,4 @@
-import React, { Component, useReducer, useState, useCallback, useMemo } from "react";
+import React, { Component, useReducer, useState, useCallback, useMemo, useEffect } from "react";
 import * as reactDom from "react-dom";
 import "./style.scss";
 
@@ -15,10 +15,10 @@ const SplashScreen: React.FunctionComponent<{}> = ()=> {
 
   const [ ,triggerFetch, [ mockApi ]]= useRequest(getMockApi);
 
-  useState(()=> { triggerFetch(); });
+  useEffect(()=> { triggerFetch(); },[]);
 
   return mockApi === undefined ? 
-      <h1>Fetching your todo items...</h1> :
+      <h1><Spinner />Fetching your todo items...</h1> :
       <App api={mockApi}/>;
 
 };
@@ -57,10 +57,13 @@ const App: React.FunctionComponent<{ api: Api }> = ({api})=>{
   useEvt(
     ctx=>{
 
+
       evtDeletedItem.attach(
         ctx,
         ({ item })=> itemLiProps.get(item)!.detach()
       );
+
+      
 
     },
     [ evtDeletedItem ]
