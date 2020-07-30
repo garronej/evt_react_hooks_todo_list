@@ -57,14 +57,11 @@ const App: React.FunctionComponent<{ api: Api }> = ({api})=>{
   useEvt(
     ctx=>{
 
-
       evtDeletedItem.attach(
         ctx,
         ({ item })=> itemLiProps.get(item)!.detach()
       );
-
       
-
     },
     [ evtDeletedItem ]
   );
@@ -154,8 +151,8 @@ const App: React.FunctionComponent<{ api: Api }> = ({api})=>{
 };
 
 reactDom.render(
-  //<React.StrictMode>
+  <React.StrictMode>
     <SplashScreen />,
-  //</React.StrictMode>, 
+  </React.StrictMode>, 
   document.getElementById("root")
 );
