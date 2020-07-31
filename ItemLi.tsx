@@ -2,11 +2,11 @@ import React, { useReducer, useCallback, useState, useEffect } from "react";
 import {Item} from "./logic";
 import { Evt, NonPostableEvt, StatefulReadonlyEvt } from "evt";
 
-import { useEvt, useStatefulEvt } from "evt/hooks";
+import { useEvt, useStatefulEvt } from "evt/hooks";
 
 import { useRequest } from "./hooks/useRequest";
-import { useSearch } from "./hooks/useSearch";
-import { Spinner } from "./Spinner";
+import { useSearch } from "./hooks/useSearch";
+import { Spinner } from "./Spinner";
 
 export type Props = {
   item: Omit<Item, "id">;
@@ -62,7 +62,7 @@ export const ItemLi: React.FunctionComponent<Props>= (props)=>{
   );
 
 
-  const [ evtIsEditing ] = useState(()=> Evt.create(false));
+  const [ evtIsEditing ] = useState(()=> Evt.create(false));
   const [ evtNewDescription ] = useState(()=>Evt.create(description));
 
   useStatefulEvt([ evtNewDescription, evtIsEditing ]);
@@ -189,4 +189,3 @@ export const ItemLi: React.FunctionComponent<Props>= (props)=>{
   
 
 };
-

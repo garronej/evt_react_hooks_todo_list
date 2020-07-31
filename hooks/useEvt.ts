@@ -5,10 +5,7 @@ import { safeClearTimeout, safeSetTimeout, Timer } from "evt/tools/safeSetTimeou
 
 declare const process: any;
 
-//NOTE: It does not work on safari.
 const isDevStrictMode = process.env.NODE_ENV !== "production";
-
-console.log({ isDevStrictMode });
 
 /**
  * Provide a Ctx to attach handlers.
@@ -48,7 +45,7 @@ export function useEvt<T>(
 
     useEffect(() => () => { ctx.done(); }, []);
 
-    //useHackStrictMode(isDevStrictMode, ctx);
+    useHackStrictMode(isDevStrictMode, ctx);
 
     return out;
 
