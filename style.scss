@@ -47,6 +47,7 @@ body {
 
     > * { 
       line-height: 2.5;
+      margin: 0;
     }
 
 
@@ -59,6 +60,7 @@ body {
       &:focus {
         outline: none;
       }
+
     }
 
     button {
