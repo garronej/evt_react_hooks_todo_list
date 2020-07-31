@@ -4,10 +4,11 @@ import "./style.scss";
 
 import { ItemLi, Props as ItemLiProps } from "./ItemLi";
 import { Item, getMockApi, Api } from "./logic";
-import { useEvt, useStatefulEvt } from "evt/hooks";
+import { useEvt } from "./hooks/useEvt";
 import { Evt } from "evt";
 import { useRequest } from "./hooks/useRequest";
 import { Spinner } from "./Spinner";
+import { useStatefulEvt } from "./hooks/useStatefulEvt";
 
 
 
@@ -35,7 +36,7 @@ const App: React.FunctionComponent<{ api: Api }> = ({api})=>{
     updateItemIsCompleted,
   } = api;
 
-  {
+  //{
 
     const [,forceUpdate]= useReducer(x=>x+1,0);
 
@@ -47,7 +48,7 @@ const App: React.FunctionComponent<{ api: Api }> = ({api})=>{
       [evtNewItem, evtDeletedItem]
     );
 
-  }
+  //}
 
   const [itemLiProps] = useState(()=> new WeakMap<
     Item, 
@@ -67,7 +68,46 @@ const App: React.FunctionComponent<{ api: Api }> = ({api})=>{
   );
 
   const [ evtNewItemDescription ] = useState(()=> Evt.create(""));
-  useStatefulEvt([evtNewItemDescription]);
+  //useStatefulEvt([evtNewItemDescription]);
+
+  /*
+  useEffect(()=>{
+
+      evtNewItemDescription.evtChange.attach(
+        text=>{
+
+          console.log("update " + text);
+
+          forceUpdate();
+
+        }
+      );
+
+
+
+  },[]);
+  */
+
+  useEvt(
+    ctx=>{
+
+      evtNewItemDescription.evtChange.attach(
+        ctx,
+        text=>{
+
+          console.log("update " + text);
+
+          forceUpdate();
+
+        }
+      );
+
+    },
+    []
+  );
+
+
+  
 
 
   const [isCreateItemRequestPending, createItem]=useRequest(
@@ -97,7 +137,10 @@ const App: React.FunctionComponent<{ api: Api }> = ({api})=>{
           <input 
             type="text" 
             value={evtNewItemDescription.state}
-            onChange={useCallback(({target})=> evtNewItemDescription.state= target.value,[])}
+            onChange={useCallback(({target})=> {
+              console.log(target.value);
+              evtNewItemDescription.state= target.value
+            },[])}
             placeholder={
               isCreateItemRequestPending?
               "Loading...":
@@ -151,8 +194,8 @@ const App: React.FunctionComponent<{ api: Api }> = ({api})=>{
 };
 
 reactDom.render(
-  <React.StrictMode>
+  //<React.StrictMode>
     <SplashScreen />,
-  </React.StrictMode>, 
+  //</React.StrictMode>, 
   document.getElementById("root")
 );
