@@ -36,7 +36,7 @@ export async function getMockApi(): Promise<Api> {
 
   const simulateNetworkDelay = (delay= 600)=> new Promise<void>(resolve=> setTimeout(resolve, delay));
 
-  await simulateNetworkDelay(100);
+  await simulateNetworkDelay(2000);
 
   const items: MutableItem[]= [
     { "id": getNewId(), "description": "🚀 Understand the useEvt hook", "isCompleted": false },

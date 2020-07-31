@@ -18,7 +18,7 @@ const SplashScreen: React.FunctionComponent<{}> = ()=> {
   useEffect(()=> { triggerFetch(); },[]);
 
   return mockApi === undefined ? 
-      <h1><Spinner />Fetching your todo items...</h1> :
+      <h1><Spinner /> Fetching your todo items...</h1> :
       <App api={mockApi}/>;
 
 };
