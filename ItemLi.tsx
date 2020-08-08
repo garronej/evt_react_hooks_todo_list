@@ -26,9 +26,7 @@ export const ItemLi: React.FunctionComponent<Props>= props =>{
 
     useEvt(
       ctx=> { 
-        evtUpdate.attach(ctx, 
-          ()=> Promise.resolve(()=> forceUpdate()) 
-        ); 
+        evtUpdate.attach(ctx, ()=> forceUpdate()); 
       },
       [item, evtUpdate]
     );
