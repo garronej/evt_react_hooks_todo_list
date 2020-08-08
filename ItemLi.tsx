@@ -69,14 +69,14 @@ export const ItemLi: React.FunctionComponent<Props>= (props)=>{
   
   /*
   When the user is updating a todo item description
-  and stop tiping for 2 second, perform the update 
+  and stop typing for 2 second, perform the update 
   automatically. 
 
-  NOTE: It would be much easyer to have a simple 
-  imput and a button that the user would
+  NOTE: It would be much easier to have a simple 
+  input and a button that the user would
   click when he is done instead of this complicated
   search hook but we use it anyway as we want to show 
-  how to implement the realtime searchbar with EVT.
+  how to implement the realtime search bar with EVT.
   */
   const { searchNowWithCurrentQuery: updateItemDescriptionNow } =useSearch({ 
     "delay": 2000, 
