@@ -16,7 +16,7 @@ export type Props = {
   deleteItem(): Promise<void>;
 };
 
-export const ItemLi: React.FunctionComponent<Props>= (props)=>{
+export const ItemLi: React.FunctionComponent<Props>= props =>{
 
   const { item, evtUpdate } = props;
 
