@@ -9,7 +9,14 @@ import { Evt } from "evt";
 import { useRequest } from "./hooks/useRequest";
 import { Spinner } from "./Spinner";
 
+/*
+This implementation of a TODO list focus on being well optimized, memory leaks free and apply 
+strict isolation of concerns.
+The result may come out as over engineered for such a straightforward web app but it provides guidelines for building React/ReactNative app that will scale well as your business grows. Keep in mind that, in React Native, memory leaks are a much bigger deal than they are on the web. 
 
+The loading times are all simulated, they are meant to show how to build a UI that stays usable
+even in bad network conditions or when the backend is under heavy loads. 
+*/
 
 const SplashScreen: React.FunctionComponent<{}> = ()=> {
 
@@ -73,7 +80,7 @@ const App: React.FunctionComponent<{ api: Api }> = ({api})=>{
   const [isCreateItemRequestPending, createItem]=useRequest(
     useCallback(
       api.createItem,
-    [api.createItem]
+      [api.createItem]
     )
   );
 

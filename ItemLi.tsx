@@ -75,8 +75,8 @@ export const ItemLi: React.FunctionComponent<Props>= (props)=>{
   NOTE: It would be much easyer to have a simple 
   imput and a button that the user would
   click when he is done instead of this complicated
-  search hook but we use it anyway as the goal of this demo
-  is mainly to demonstrate how to use EVT with react.
+  search hook but we use it anyway as we want to show 
+  how to implement the realtime searchbar with EVT.
   */
   const { searchNowWithCurrentQuery: updateItemDescriptionNow } =useSearch({ 
     "delay": 2000, 
