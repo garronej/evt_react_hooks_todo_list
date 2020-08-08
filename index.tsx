@@ -16,6 +16,9 @@ The result may come out as over engineered for such a straightforward web app bu
 
 The loading times are all simulated, they are meant to show how to build a UI that stays usable
 even in bad network conditions or when the backend is under heavy loads. 
+
+NOTE: Be mindfull that Stackblitz does not use TypeScript in strict mode. 
+A lot of token that would be 'T | undefined' in VSCode are 'T' here.
 */
 
 const SplashScreen: React.FunctionComponent<{}> = ()=> {
