@@ -1,5 +1,4 @@
-import React, { useState, useCallback, useEffect, useMemo } from "react";
-import { Evt } from "evt";
+import { useState, useCallback, useEffect, useMemo } from "react";
 import * as runExclusive from "run-exclusive";
 
 
@@ -9,10 +8,10 @@ import * as runExclusive from "run-exclusive";
  * Take a function that takes some time to complete
  * and return a function that return void instead of Promise<U>
  * alongside a boolean value that is true while there is a request
- * currently beeing performed.
+ * currently being performed.
  * 
  * Calls are queued, only one instance of the request can be running
- * simultanously.
+ * simultaneously.
  * 
  * This hooks does not handle errors.
  * Makes sure mareRequest never rejects.
@@ -88,56 +87,3 @@ export function useRequest<T extends any[], U>(
   ];
 
 }
-
-/*
-export function useRequest<T extends any[]>(
-  makeRequest: (...args: T)=> Promise<any>
-): [boolean, (...args: T)=> void] {
-
-  const [ isRequestLoading, setIsRequestLoading ]= useState(false);
-
-  const [ args, setArgs ] = useState<T | undefined>(undefined);
-
-  const runExclusiveMakeRequest= useMemo(
-    ()=> runExclusive.build(makeRequest),
-    [makeRequest]
-  );
-
-  useEffect(()=>{
-
-    if( args === undefined ){
-      return;
-    }
-
-    let ignore =false;
-
-    (async ()=>{
-
-      setIsRequestLoading(true);
-
-      await runExclusiveMakeRequest(...args);
-
-      if( ignore ){
-        return;
-      }
-
-      setIsRequestLoading(false);
-
-    })();
-
-    return ()=> { ignore = true; };
-
-
-  }, [args]);
-
-  return [
-    isRequestLoading, 
-    useCallback(
-      (...args: T)=>{ setArgs(args); }, 
-      []
-    )
-  ];
-
-}
-*/
-
