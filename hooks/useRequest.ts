@@ -61,7 +61,7 @@ export function useRequest<T extends any[], U>(
 
     return ()=> { ignore = true; };
 
-  }, [args]);
+  }, [args, runExclusiveMakeRequest]);
 
   return [
     isRequestPending, 
