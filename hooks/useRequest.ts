@@ -3,7 +3,7 @@ import * as runExclusive from "run-exclusive";
 
 
 /** 
- * Returns [ isRequestPending, makeRequestProxy, [<lastRequestResult>?] ] 
+ * Returns [ isRequestPending, makeRequestProxy, [lastRequestResult?] ] 
  * 
  * Take a function that takes some time to complete
  * and return a function that return void instead of Promise<U>
@@ -22,7 +22,7 @@ export function useRequest<T extends any[], U>(
 ): [
   boolean,
   (...args: T)=> void,
-  [U] | [],
+  [U] | []
 ] {
 
   const [ isRequestPending, setIsRequestPending ]= useState(false);
