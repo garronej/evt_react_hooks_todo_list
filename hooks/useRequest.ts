@@ -25,16 +25,8 @@ export function useRequest<T extends any[], U>(
   [U] | [],
 ] {
 
-  const [ 
-    { isRequestPending, dataWrap }, 
-    setIsRequestPendingAndDataWrap
-  ]= useState<{ 
-    isRequestPending: boolean; 
-    dataWrap: [U]|[]; 
-  }>({ 
-    "isRequestPending": false, 
-    "dataWrap": [] 
-  });
+  const [ isRequestPending, setIsRequestPending ]= useState(false);
+  const [ dataWrap, setDataWrap ]= useState<[U]|[]>([]);
 
   const [ args, setArgs ] = useState<T | undefined>(undefined);
 
@@ -53,10 +45,7 @@ export function useRequest<T extends any[], U>(
 
     (async ()=>{
 
-      setIsRequestPendingAndDataWrap({ 
-        "isRequestPending": true, 
-        "dataWrap": dataWrap 
-      });
+      setIsRequestPending(true);
 
       const data = await runExclusiveMakeRequest(...args);
 
@@ -64,16 +53,13 @@ export function useRequest<T extends any[], U>(
         return;
       }
 
-      setIsRequestPendingAndDataWrap({
-        "isRequestPending": runExclusive.isRunning(runExclusiveMakeRequest),
-        "dataWrap": [data]
-      });
+      setIsRequestPending(runExclusive.isRunning(runExclusiveMakeRequest));
 
+      setDataWrap([data]);
 
     })();
 
     return ()=> { ignore = true; };
-
 
   }, [args]);
 
