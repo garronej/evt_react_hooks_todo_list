@@ -31,7 +31,8 @@ export function useRequest<T extends any[], U>(
   const [ args, setArgs ] = useState<T | undefined>(undefined);
 
   const runExclusiveMakeRequest= useMemo(
-    ()=> runExclusive.build(makeRequest),
+    //NOTE: TypeScript why would you betray me like that? This should be inferable...
+    () => runExclusive.build(makeRequest as any) as typeof makeRequest,
     [makeRequest]
   );
 
