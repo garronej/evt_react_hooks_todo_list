@@ -6,7 +6,7 @@ import { ItemLi, Props as ItemLiProps } from "./ItemLi";
 import { Item, Store } from "./store";
 import { useEvt, useStatefulEvt } from "evt/hooks";
 import { Evt } from "evt";
-import { useAsync } from "react-async-hook";
+import { useAsync, useAsyncCallback} from "react-async-hook";
 import { Spinner } from "./Spinner";
 
 
@@ -34,13 +34,7 @@ export const App: React.FunctionComponent<{ store: Store }> = ({ store })=>{
   
   useStatefulEvt([evtNewItemDescription]);
 
-
-  const [isCreateItemRequestPending, createItem]=useRequest(
-    useCallback(
-      api.createItem,
-      [api.createItem]
-    )
-  );
+  const asyncCreateItem = useAsyncCallback(store.createItem);
 
   return (
     <div className="App">
@@ -48,14 +42,14 @@ export const App: React.FunctionComponent<{ store: Store }> = ({ store })=>{
       onSubmit={useCallback(event=> { 
         event.preventDefault();
 
-        createItem({
+        asyncCreateItem.execute({
           "description": evtNewItemDescription.state,
           "isCompleted": false
         });
 
         evtNewItemDescription.state = "";
 
-      },[createItem])}
+      },[asyncCreateItem])}
       >
 
         <div className="wrapper">
@@ -64,19 +58,19 @@ export const App: React.FunctionComponent<{ store: Store }> = ({ store })=>{
             value={evtNewItemDescription.state}
             onChange={useCallback(({target})=> evtNewItemDescription.state= target.value,[])}
             placeholder={
-              isCreateItemRequestPending?
+              asyncCreateItem.loading?
               "Loading...":
               "Describe a new thing to do..."
             }
           />
           <button type="submit">
-            {isCreateItemRequestPending?<Spinner />:"Add"}
+            {asyncCreateItem.loading?<Spinner />:"Add"}
           </button>
           
         </div>
       </form>
       <ul>
-        {items.map(item=> {
+        {store.items.map(item=> {
 
             let props = itemLiProps.get(item);
 

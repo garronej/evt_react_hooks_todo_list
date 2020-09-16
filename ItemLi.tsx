@@ -1,73 +1,67 @@
 import React, { useReducer, useCallback, useState, useEffect } from "react";
-import {Item} from "./store";
+import {Item, Store} from "./store";
 import { Evt, NonPostableEvt, StatefulReadonlyEvt } from "evt";
 
 import { useEvt, useStatefulEvt } from "evt/hooks";
-import { useAsync } from "react-async-hook";
+import { useAsyncCallback } from "react-async-hook";
 
 import { useSearch } from "./hooks/useSearch";
 import { Spinner } from "./Spinner";
+import AwesomeDebouncePromise from "awesome-debounce-promise";
 
 export type Props = {
-  item: Omit<Item, "id">;
-  evtUpdate: NonPostableEvt<{ updateType: "DESCRIPTION" | "IS COMPLETED";  }>;
-  updateItemDescription(params: { description: string; }): Promise<void>;
-  updateItemIsCompleted(params: { isCompleted: boolean; }): Promise<void>;
-  deleteItem(): Promise<void>;
+  item: Item;
+  store: Pick<Store, "evtItemUpdated" | "updateItemIsCompleted" | "updateItemDescription" | "deleteItem">
 };
 
 export const ItemLi: React.FunctionComponent<Props>= props =>{
 
-  const { item, evtUpdate } = props;
+  const { item, store } = props;
 
-  {
+  
+  const [,forceUpdate]= useReducer(x=>x+1,0);
 
-    const [,forceUpdate]= useReducer(x=>x+1,0);
+  useEvt(
+    ctx=> { 
+      //NOTE: Re-render only when our Item is updated.
+      store.evtItemUpdated.attach(
+        ({ item: { id } }) => id === item.id, 
+        ctx, 
+        ()=> forceUpdate()); 
+    },
+    [item, store]
+  );
+  
 
-    useEvt(
-      ctx=> { 
-        evtUpdate.attach(ctx, ()=> forceUpdate()); 
-      },
-      [item, evtUpdate]
-    );
 
-  }
-
-  const { description, isCompleted } = item;
-
-  const asyncUpdateItemisComleted = useAsync(
-    
-  )
-
-  const [isRequestUpdateIsCompletePending, updateItemIsCompleted ] = 
-  useRequest(  
-    useCallback(
-      ()=> props.updateItemIsCompleted({ "isCompleted": !item.isCompleted }), 
-      [props.updateItemIsCompleted, item] 
-    )
+  const asyncUpdateItemIsCompleted = useAsyncCallback(
+      useCallback(
+        ()=> store.updateItemIsCompleted({ item, "isCompleted": !item.isCompleted }), 
+        [item, store] 
+      )
   );
 
-  const [isRequestUpdateDescriptionPending, updateItemDescription] = 
-  useRequest(
-    useCallback(
-      (description: string)=> props.updateItemDescription({ description }), 
-      [props.updateItemDescription] 
-    )
+
+  const asyncUpdateItemDescription = useAsyncCallback(
+      useCallback(
+        (description: string)=> store.updateItemDescription({ item, description }), 
+        [item, store] 
+      )
   );
 
-  const [isRequestDeleteItemPending, deleteItem]
-  = useRequest(
-    useCallback(
-      ()=> props.deleteItem(),
-      [props.deleteItem]
-    )
+  const asyncUpdateDeleteItem = useAsyncCallback(
+      useCallback(
+        ()=> store.deleteItem({ item }), 
+        [item, store] 
+      )
   );
+
 
 
   const [ evtIsEditing ] = useState(()=> Evt.create(false));
-  const [ evtNewDescription ] = useState(()=>Evt.create(description));
+  const [ evtInputText ] = useState(()=>Evt.create(item.description));
 
-  useStatefulEvt([ evtNewDescription, evtIsEditing ]);
+  useStatefulEvt([ evtIsEditing, evtInputText ]);
   
   /*
   When the user is updating a todo item description
