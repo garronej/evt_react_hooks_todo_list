@@ -16,7 +16,7 @@ export const App: React.FunctionComponent<{ store: Store }> = ({ store })=>{
 
   /*
   NOTE: Here we have a store that keep only one copy of the data
-  and mutates it internally (unlike with redux that create new copies when
+  and mutates it internally (unlike redux that create new copies when
   actions are dispated).
   The store iforms of mutation that took place by posting
   evtNewItem, evtDeletedItem and evtUpdatedItem. 
