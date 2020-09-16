@@ -3,57 +3,35 @@ import * as reactDom from "react-dom";
 import "./style.scss";
 
 import { ItemLi, Props as ItemLiProps } from "./ItemLi";
-import { Item, getMockApi, Api } from "./logic";
+import { Item, Store } from "./store";
 import { useEvt, useStatefulEvt } from "evt/hooks";
 import { Evt } from "evt";
 import { useAsync } from "react-async-hook";
 import { Spinner } from "./Spinner";
 
 
-export const App: React.FunctionComponent<{ api: Api }> = ({api})=>{
+export const App: React.FunctionComponent<{ store: Store }> = ({ store })=>{
 
-  const { 
-    items, 
-    evtNewItem, 
-    evtDeletedItem, 
-    evtItemUpdated,
-    deleteItem, 
-    updateItemDescription, 
-    updateItemIsCompleted,
-  } = api;
-
-  {
-
-    const [,forceUpdate]= useReducer(x=>x+1,0);
-
-    useEvt(
-      ctx=> {
-        Evt.merge(ctx, [evtNewItem, evtDeletedItem])
-        .attach(()=>forceUpdate());
-      },
-      [evtNewItem, evtDeletedItem]
-    );
-
-  }
-
-  const [itemLiProps] = useState(()=> new WeakMap<
-    Item, 
-    Omit<ItemLiProps,"item"> & { detach(): void; }
-  >());
+  const [,forceUpdate]= useReducer(x=>x+1,0);
 
   useEvt(
-    ctx=>{
+    ctx=> {
 
-      evtDeletedItem.attach(
-        ctx,
-        ({ item })=> itemLiProps.get(item)!.detach()
-      );
+      Evt.merge(
+        ctx, 
+        [
+          store.evtNewItem, 
+          store.evtDeletedItem
+        ]
+      ).attach(()=>forceUpdate());
       
     },
-    [ evtDeletedItem ]
+    [store]
   );
 
+  
   const [ evtNewItemDescription ] = useState(()=> Evt.create(""));
+  
   useStatefulEvt([evtNewItemDescription]);
 
 

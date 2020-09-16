@@ -1,5 +1,5 @@
 import React, { useReducer, useCallback, useState, useEffect } from "react";
-import {Item} from "./logic";
+import {Item} from "./store";
 import { Evt, NonPostableEvt, StatefulReadonlyEvt } from "evt";
 
 import { useEvt, useStatefulEvt } from "evt/hooks";

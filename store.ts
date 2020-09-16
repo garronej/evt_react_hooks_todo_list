@@ -1,16 +1,19 @@
 
 import  { Evt, NonPostableEvt, ToPostableEvt, StatefulReadonlyEvt } from "evt";
 
-type MutableItem= {
+type MutableItem = {
   id: string;
   description: string;
   isCompleted: boolean;
 };
 
-export interface Item extends Readonly<MutableItem> {}
+export type Item = Readonly<MutableItem>;
 
-export type Api ={
-  readonly items: Readonly<Item[]>;
+type ItemLike = Pick<Item, "id">;
+
+export type Store = Readonly<{
+
+  items: Item[];
 
   /* Evts to notify when the items has changed */
   evtNewItem: NonPostableEvt<{ item: Item; }>;
@@ -19,12 +22,13 @@ export type Api ={
 
   /* Function for changing the items */
   createItem(params: { description: string; isCompleted: boolean; }): Promise<void>;
-  deleteItem(params: { item: Item; }): Promise<void>;
-  updateItemDescription(params: { item: Item; description: string; }): Promise<void>;
-  updateItemIsCompleted(params: { item: Item; isCompleted: boolean; }): Promise<void>;
-};
+  deleteItem(params: { item: ItemLike; }): Promise<void>;
+  updateItemDescription(params: { item: ItemLike; description: string; }): Promise<void>;
+  updateItemIsCompleted(params: { item: ItemLike; isCompleted: boolean; }): Promise<void>;
 
-export async function getMockApi(): Promise<Api> {
+}>;
+
+export async function getMockStore(): Promise<Store> {
 
    const getNewId= (()=>{
 
@@ -42,11 +46,10 @@ export async function getMockApi(): Promise<Api> {
     { "id": getNewId(), "description": "🚀 Understand the useEvt hook", "isCompleted": false },
     { "id": getNewId(), "description": "⭐ Understand the useStatefulEvt hook", "isCompleted": false },
     { "id": getNewId(), "description": "🔒 Checkout run-exclusive, usefull for network requests", "isCompleted": false },
-    { "id": getNewId(), "description": "💧 Acknowledge that EVT works well with React Hooks", "isCompleted": true },
-
+    { "id": getNewId(), "description": "💧 Acknowledge that EVT works well with React Hooks", "isCompleted": true }
   ];
 
-  const api: ToPostableEvt<Api>= {
+  const store: ToPostableEvt<Store>= {
     items,
     "evtNewItem": new Evt(),
     "evtDeletedItem": new Evt(),
@@ -63,47 +66,60 @@ export async function getMockApi(): Promise<Api> {
 
         items.unshift(item);
 
-        api.evtNewItem.post({item});
+        store.evtNewItem.post({item});
 
 
     },
-    "deleteItem": async ({ item })=> {
+    "deleteItem": async ({ item: { id } })=> {
 
         await simulateNetworkDelay();
+
+        const item = items.find(item=> item.id === id);
+        
+        if( item === undefined ){
+          return;
+        }
 
         items.splice(items.indexOf(item), 1);
 
-        api.evtDeletedItem.post({ item });
+        store.evtDeletedItem.post({ item });
 
     },
-    "updateItemDescription": async ({ item, description }) => {
+    "updateItemDescription": async ({ item: { id }, description })=> {
 
-        if( item.description === description ){
+        const item = items.find(item=> item.id === id);
+
+        if( item === undefined || item.description === description ){
           return;
         }
 
         await simulateNetworkDelay();
 
-        (item as MutableItem).description = description;
+        item.description = description;
 
-        api.evtItemUpdated.post({ item, "updateType": "DESCRIPTION" });
+        store.evtItemUpdated.post({ item, "updateType": "DESCRIPTION" });
 
     },
-    "updateItemIsCompleted": async ({ item, isCompleted }) => {
+    "updateItemIsCompleted": async ({ item: { id }, isCompleted }) => {
 
-        if( item.isCompleted === isCompleted ){
+        const item = items.find(item=> item.id === id);
+
+      
+        if( item === undefined || item.isCompleted === isCompleted ){
           return;
         }
-
+        
         await simulateNetworkDelay();
 
-        (item as MutableItem).isCompleted = isCompleted;
+        item.isCompleted = isCompleted;
 
-        api.evtItemUpdated.post({ item, "updateType": "IS COMPLETED" });
+        store.evtItemUpdated.post({ item, "updateType": "IS COMPLETED" });
 
     }
   };
 
-  return api;
+  return store;
 
 }
+
+
