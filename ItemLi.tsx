@@ -3,8 +3,8 @@ import {Item} from "./logic";
 import { Evt, NonPostableEvt, StatefulReadonlyEvt } from "evt";
 
 import { useEvt, useStatefulEvt } from "evt/hooks";
+import { useAsync } from "react-async-hook";
 
-import { useRequest } from "./hooks/useRequest";
 import { useSearch } from "./hooks/useSearch";
 import { Spinner } from "./Spinner";
 
@@ -34,6 +34,10 @@ export const ItemLi: React.FunctionComponent<Props>= props =>{
   }
 
   const { description, isCompleted } = item;
+
+  const asyncUpdateItemisComleted = useAsync(
+    
+  )
 
   const [isRequestUpdateIsCompletePending, updateItemIsCompleted ] = 
   useRequest(  

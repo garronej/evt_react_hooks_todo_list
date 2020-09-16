@@ -7,6 +7,7 @@
     "@types/react-dom": "^16.8.0",
     "evt": "^1.8.9",
     "react": "^16.8.0",
+    "react-async-hook": "^3.6.1",
     "react-dom": "^16.8.0",
     "run-exclusive": "^2.2.8"
   },
