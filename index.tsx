@@ -20,7 +20,7 @@ const Switcher: React.FunctionComponent<{}> = ()=> {
 
   return asyncGetMockStore.result === undefined ?
     <h1><Spinner /> Fetching your todo items...</h1> :
-    <App api={asyncGetMockStore.result} />;
+    <App store={asyncGetMockStore.result} />;
 
 };
 
