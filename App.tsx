@@ -14,6 +14,15 @@ export const App: React.FunctionComponent<{ store: Store }> = ({ store })=>{
 
   const [,forceUpdate]= useReducer(x=>x+1,0);
 
+  /*
+  NOTE: Here we have a store that keep only one copy of the data
+  and mutates it internally (unlike with redux that create new copies when
+  actions are dispated).
+  The store iforms of mutation that took place by posting
+  evtNewItem, evtDeletedItem and evtUpdatedItem. 
+  In this paradigme the we are in charge of trigering new render
+  when and where it's relevent.
+  */
   useEvt(
     ctx=> {
 
@@ -57,6 +66,7 @@ export const App: React.FunctionComponent<{ store: Store }> = ({ store })=>{
             type="text" 
             value={evtNewItemDescription.state}
             onChange={useCallback(({target})=> evtNewItemDescription.state= target.value,[])}
+            readOnly={asyncCreateItem.loading}
             placeholder={
               asyncCreateItem.loading?
               "Loading...":
@@ -70,38 +80,12 @@ export const App: React.FunctionComponent<{ store: Store }> = ({ store })=>{
         </div>
       </form>
       <ul>
-        {store.items.map(item=> {
-
-            let props = itemLiProps.get(item);
-
-            if( !props ){
-
-              const ctx = Evt.newCtx();
-
-              props = {
-                "evtUpdate": evtItemUpdated.pipe(ctx,data=> data.item === item),
-                "updateItemDescription": ({ description })=> updateItemDescription({item, description}),
-                "updateItemIsCompleted": ({ isCompleted })=> updateItemIsCompleted({item, isCompleted}),
-                "deleteItem": ()=> deleteItem({item}),
-                "detach": ()=> ctx.done()
-              };
-
-              itemLiProps.set(item, props);
-
-            }
-
-            return (
-              <ItemLi
-                key={item.id}
-                item={item}
-                evtUpdate={props.evtUpdate}
-                updateItemDescription={props.updateItemDescription}
-                updateItemIsCompleted={props.updateItemIsCompleted}
-                deleteItem={props.deleteItem}
-              />
-            );
-
-          }
+        {store.items.map(item=> 
+          <ItemLi
+            key={item.id}
+            item={item}
+            store={store}
+          /> 
         )}
       </ul>
     </div>

@@ -1,4 +1,4 @@
-import React, { useReducer, useCallback, useState, useEffect } from "react";
+import React, { useReducer, useCallback, useState, useEffect, useMemo } from "react";
 import {Item, Store} from "./store";
 import { Evt, NonPostableEvt, StatefulReadonlyEvt } from "evt";
 
@@ -33,7 +33,6 @@ export const ItemLi: React.FunctionComponent<Props>= props =>{
   );
   
 
-
   const asyncUpdateItemIsCompleted = useAsyncCallback(
       useCallback(
         ()=> store.updateItemIsCompleted({ item, "isCompleted": !item.isCompleted }), 
@@ -41,13 +40,6 @@ export const ItemLi: React.FunctionComponent<Props>= props =>{
       )
   );
 
-
-  const asyncUpdateItemDescription = useAsyncCallback(
-      useCallback(
-        (description: string)=> store.updateItemDescription({ item, description }), 
-        [item, store] 
-      )
-  );
 
   const asyncUpdateDeleteItem = useAsyncCallback(
       useCallback(
@@ -57,39 +49,29 @@ export const ItemLi: React.FunctionComponent<Props>= props =>{
   );
 
 
-
   const [ evtIsEditing ] = useState(()=> Evt.create(false));
   const [ evtInputText ] = useState(()=>Evt.create(item.description));
 
   useStatefulEvt([ evtIsEditing, evtInputText ]);
-  
-  /*
-  When the user is updating a todo item description
-  and stop typing for 2 second, perform the update 
-  automatically. 
 
-  NOTE: It would be much easier to have a simple 
-  input and a button that the user would
-  click when he is done instead of this complicated
-  search hook but we use it anyway as we want to show 
-  how to implement the realtime search bar with EVT.
-  */
-  const { searchNowWithCurrentQuery: updateItemDescriptionNow } =useSearch({ 
-    "delay": 2000, 
-    "evtQuery": evtNewDescription, 
-    "search": updateItemDescription 
-  });
+  const asyncUdateItemDescrption = useAsyncCallback(
+    useCallback(
+      ()=> store.updateItemDescription({ item, "description": evtInputText.state }),
+      [item, store]
+    )
+  );
 
-  //Automatically switch from the input text to the span
+  //Remplace the input text by the span when the item description have been sucessfully updated.
   useEffect(()=>{
 
-    if( isRequestUpdateDescriptionPending ){
+    if( asyncUdateItemDescrption.loading ){
       return;
     }
 
     evtIsEditing.state = false;
 
-  }, [isRequestUpdateDescriptionPending]);
+  }, [asyncUdateItemDescrption.loading]);
+
 
   //For animation.
   const [isShowClassApplyed, setIsShowClassApplyed ] = useState(false);
@@ -105,8 +87,22 @@ export const ItemLi: React.FunctionComponent<Props>= props =>{
 
   const onInputChange = useCallback(
     ({target}: React.ChangeEvent<HTMLInputElement>)=>
-      evtNewDescription.state = target.value,
+      evtInputText.state = target.value,
     []
+  );
+
+  /*
+  When the user is updating a todo item description
+  and stop typing for 2 second, perform the update 
+  automatically. 
+  */
+  
+
+  const asyncDeouncedUpdateitemDescrption = useAsyncCallback(
+      useMemo(() =>
+        AwesomeDebouncePromise(asyncUdateItemDescrption.execute, 2000),
+        [asyncUdateItemDescrption]
+      )
   );
 
   //When the user press enter, update imediately. 
@@ -119,7 +115,7 @@ export const ItemLi: React.FunctionComponent<Props>= props =>{
                       
       event.preventDefault();
 
-      updateItemDescriptionNow();
+      asyncDeouncedUpdateitemDescrption.execute();
 
     },
     []
@@ -130,23 +126,19 @@ export const ItemLi: React.FunctionComponent<Props>= props =>{
     []
   );
 
-  
-  
   return (
     <li className={`itemLi${isShowClassApplyed ? " show":""}`}>
       <div>
       {
-        isRequestUpdateIsCompletePending ? 
+        asyncUpdateItemIsCompleted.loading ? 
           <Spinner /> :
           <input
             type="checkbox"
-            checked={isCompleted}
-            onChange={updateItemIsCompleted}
-            readOnly={isRequestUpdateIsCompletePending}           
+            checked={item.isCompleted}
+            onChange={asyncUpdateItemIsCompleted.execute}
           />
       }
       </div>
-
 
       <div>
       {
@@ -154,27 +146,27 @@ export const ItemLi: React.FunctionComponent<Props>= props =>{
         <div>
           <input
             type="text"
-            value={evtNewDescription.state}
+            value={evtInputText.state}
             onChange={onInputChange}
             onKeyPress={onInputKeyPress}
-            readOnly={isRequestUpdateDescriptionPending}
-            onBlur={updateItemDescriptionNow}
+            readOnly={asyncUdateItemDescrption.loading}
+            onBlur={asyncUdateItemDescrption.execute}
             autoFocus
           />
-          {isRequestUpdateDescriptionPending && <Spinner />}
+          {asyncUdateItemDescrption.loading && <Spinner />}
         </div>):
         <span 
-          className={isCompleted?"barred":""} 
+          className={item.isCompleted?"barred":""} 
           onClick={onSpanClick}
-        >{description}</span>
+        >{item.description}</span>
       }
       </div>
 
       <div>
       {
-        isRequestDeleteItemPending ? 
+        asyncUpdateDeleteItem.loading ? 
           <Spinner /> :
-          <button onClick={deleteItem}>
+          <button onClick={asyncUpdateDeleteItem.execute}>
             <i className="fa fa-trash-o" />
           </button>
       }
@@ -182,6 +174,5 @@ export const ItemLi: React.FunctionComponent<Props>= props =>{
     </li>
   );
 
-  
 
 };
