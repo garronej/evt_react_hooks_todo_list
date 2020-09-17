@@ -5,7 +5,6 @@ import { Evt, NonPostableEvt, StatefulReadonlyEvt } from "evt";
 import { useEvt, useStatefulEvt } from "evt/hooks";
 import { useAsyncCallback } from "react-async-hook";
 
-import { useSearch } from "./hooks/useSearch";
 import { Spinner } from "./Spinner";
 import AwesomeDebouncePromise from "awesome-debounce-promise";
 
@@ -109,14 +108,13 @@ export const ItemLi: React.FunctionComponent<Props>= props =>{
   const onInputKeyPress = useCallback(
     (event: React.KeyboardEvent<HTMLInputElement>)=> {
 
-      if( event.key !== "Enter" ){
+      if( event.key === "Enter" ){
+        event.preventDefault();
+        asyncUdateItemDescrption.execute();
         return;
       }
-                      
-      event.preventDefault();
-
       asyncDeouncedUpdateitemDescrption.execute();
-
+                      
     },
     []
   );
