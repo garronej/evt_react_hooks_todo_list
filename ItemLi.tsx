@@ -103,14 +103,14 @@ export const ItemLi: React.FunctionComponent<Props>= props =>{
         [asyncUdateItemDescrption]
       )
   );
-
+  
   //When the user press enter, update imediately. 
   const onInputKeyPress = useCallback(
     (event: React.KeyboardEvent<HTMLInputElement>)=> {
 
       if( event.key === "Enter" ){
         event.preventDefault();
-        asyncUdateItemDescrption.reset();
+        //TODO: Cancel sheduled
         asyncUdateItemDescrption.execute();
         return;
       }
