@@ -110,6 +110,7 @@ export const ItemLi: React.FunctionComponent<Props>= props =>{
 
       if( event.key === "Enter" ){
         event.preventDefault();
+        asyncUdateItemDescrption.reset();
         asyncUdateItemDescrption.execute();
         return;
       }
