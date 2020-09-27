@@ -1,12 +1,11 @@
-import React, { Component, useReducer, useState, useCallback, useMemo, useEffect } from "react";
-import * as reactDom from "react-dom";
+import React, { useReducer, useState, useCallback } from "react";
 import "./style.scss";
 
-import { ItemLi, Props as ItemLiProps } from "./ItemLi";
-import { Item, Store } from "./store";
+import { ItemLi } from "./ItemLi";
+import { Store } from "./store";
 import { useEvt, useStatefulEvt } from "evt/hooks";
 import { Evt } from "evt";
-import { useAsync, useAsyncCallback} from "react-async-hook";
+import { useAsyncCallback} from "react-async-hook";
 import { Spinner } from "./Spinner";
 
 
