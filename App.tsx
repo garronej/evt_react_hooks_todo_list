@@ -40,6 +40,7 @@ export const App: React.FunctionComponent<{ store: Store }> = ({ store })=>{
   
   const [ evtNewItemDescription ] = useState(()=> Evt.create(""));
   
+  /** This hooks make the component re-render whenever evtNewItemDescription.state changes */
   useStatefulEvt([evtNewItemDescription]);
 
   const asyncCreateItem = useAsyncCallback(store.createItem);
