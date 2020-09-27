@@ -1,11 +1,8 @@
-import React, { Component, useReducer, useState, useCallback, useMemo, useEffect } from "react";
+import React from "react";
 import * as reactDom from "react-dom";
 import "./style.scss";
 
-import { ItemLi, Props as ItemLiProps } from "./ItemLi";
 import { getMockStore } from "./store";
-import { useEvt, useStatefulEvt } from "evt/hooks";
-import { Evt } from "evt";
 import { useAsync } from "react-async-hook";
 import { Spinner } from "./Spinner";
 import { App } from "./App";
