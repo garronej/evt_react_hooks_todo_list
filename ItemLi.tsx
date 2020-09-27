@@ -1,6 +1,6 @@
 import React, { useReducer, useCallback, useState, useEffect, useMemo } from "react";
 import {Item, Store} from "./store";
-import { Evt, NonPostableEvt, StatefulReadonlyEvt } from "evt";
+import { Evt } from "evt";
 
 import { useEvt, useStatefulEvt } from "evt/hooks";
 import { useAsyncCallback } from "react-async-hook";
