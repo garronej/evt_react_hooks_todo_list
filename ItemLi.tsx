@@ -23,12 +23,12 @@ export const ItemLi: React.FunctionComponent<Props>= props =>{
   const [,forceUpdate]= useReducer(x=>x+1,0);
 
   useEvt(
-    ({ ctx })=> { 
+    ({ ctx, registerSideEffect })=> { 
       //NOTE: Re-render only when our Item is updated.
       store.evtItemUpdated.attach(
         ({ item: { id } }) => id === item.id, 
         ctx, 
-        ()=> forceUpdate()); 
+        ()=> registerSideEffect(forceUpdate)); 
     },
     [item, store]
   );
