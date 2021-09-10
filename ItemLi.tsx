@@ -2,11 +2,13 @@ import React, { useReducer, useCallback, useState, useEffect, useMemo } from "re
 import {Item, Store} from "./store";
 import { Evt } from "evt";
 
-import { useEvt, useStatefulEvt } from "evt/hooks";
+import { useEvt, useRerenderOnStateChange} from "evt/hooks";
 import { useAsyncCallback } from "react-async-hook";
 
 import { Spinner } from "./Spinner";
 import AwesomeDebouncePromise from "awesome-debounce-promise";
+
+
 
 export type Props = {
   item: Item;
@@ -21,7 +23,7 @@ export const ItemLi: React.FunctionComponent<Props>= props =>{
   const [,forceUpdate]= useReducer(x=>x+1,0);
 
   useEvt(
-    ctx=> { 
+    ({ ctx })=> { 
       //NOTE: Re-render only when our Item is updated.
       store.evtItemUpdated.attach(
         ({ item: { id } }) => id === item.id, 
@@ -51,7 +53,7 @@ export const ItemLi: React.FunctionComponent<Props>= props =>{
   const [ evtIsEditing ] = useState(()=> Evt.create(false));
   const [ evtInputText ] = useState(()=>Evt.create(item.description));
 
-  useStatefulEvt([ evtIsEditing, evtInputText ]);
+  useRerenderOnStateChange(evtIsEditing, evtInputText );
 
   const asyncUdateItemDescrption = useAsyncCallback(
     useCallback(

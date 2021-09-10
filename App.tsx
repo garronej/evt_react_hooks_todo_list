@@ -3,7 +3,7 @@ import "./style.scss";
 
 import { ItemLi } from "./ItemLi";
 import { Store } from "./store";
-import { useEvt, useStatefulEvt } from "evt/hooks";
+import { useEvt, useRerenderOnStateChange } from "evt/hooks";
 import { Evt } from "evt";
 import { useAsyncCallback} from "react-async-hook";
 import { Spinner } from "./Spinner";
@@ -23,17 +23,14 @@ export const App: React.FunctionComponent<{ store: Store }> = ({ store })=>{
   when and where it's relevent.
   */
   useEvt(
-    ctx=> {
-
+    ({ ctx })=>
       Evt.merge(
         ctx, 
         [
           store.evtNewItem, 
           store.evtDeletedItem
         ]
-      ).attach(()=>forceUpdate());
-      
-    },
+      ).attach(()=>forceUpdate()),
     [store]
   );
 
@@ -41,7 +38,7 @@ export const App: React.FunctionComponent<{ store: Store }> = ({ store })=>{
   const [ evtNewItemDescription ] = useState(()=> Evt.create(""));
   
   /** This hooks make the component re-render whenever evtNewItemDescription.state changes */
-  useStatefulEvt([evtNewItemDescription]);
+  useRerenderOnStateChange(evtNewItemDescription);
 
   const asyncCreateItem = useAsyncCallback(store.createItem);
 

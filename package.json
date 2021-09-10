@@ -3,13 +3,13 @@
   "version": "0.0.0",
   "private": true,
   "dependencies": {
-    "@types/react": "^16.8.2",
-    "@types/react-dom": "^16.8.0",
-    "awesome-debounce-promise": "^2.1.0",
-    "evt": "^1.9.5",
-    "react": "^16.8.0",
-    "react-async-hook": "^3.6.1",
-    "react-dom": "^16.8.0"
+    "@types/react": "16.14.15",
+    "@types/react-dom": "16.9.14",
+    "awesome-debounce-promise": "2.1.0",
+    "evt": "2.0.0-beta.30",
+    "react": "16.14.0",
+    "react-async-hook": "3.6.2",
+    "react-dom": "16.14.0"
   },
   "scripts": {
     "start": "react-scripts-ts start",
