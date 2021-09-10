@@ -23,14 +23,14 @@ export const App: React.FunctionComponent<{ store: Store }> = ({ store })=>{
   when and where it's relevent.
   */
   useEvt(
-    ({ ctx, registerSideEffect })=>
+    (ctx, registerSideEffect )=>
       Evt.merge(
         ctx, 
         [
           store.evtNewItem, 
           store.evtDeletedItem
         ]
-      ).attach(()=>registerSideEffect(forceUpdate)),
+      ).attach(()=>forceUpdate()),
     [store]
   );
 
